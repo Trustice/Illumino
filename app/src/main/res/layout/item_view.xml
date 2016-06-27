@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
+
+            <RelativeLayout
+                android:id="@+id/roomAction"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/av_background_40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/imageView"/>
+
+                <ImageView
+                    android:id="@+id/item_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_weekend_white_24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item_colorIcon"
+                    android:src="@drawable/ic_circle_white_18dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/relativeLayout"
+                    android:layout_marginStart="24dp" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:id="@+id/relativeLayout">
+
+                    <TextView
+                        android:id="@+id/item_txtName"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Room name"
+                        android:layout_marginStart="16dp"
+                        android:paddingTop="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="21.30 °C / 45.10 % r.h."
+                        android:id="@+id/item_txtTemp"
+                        android:layout_below="@+id/item_txtName"
+                        android:layout_alignStart="@+id/item_txtName"
+                        style="@style/Base.TextAppearance.AppCompat.Caption" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_switch"
+                android:layout_gravity="center_vertical"
+                android:checked="false"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+</RelativeLayout>
