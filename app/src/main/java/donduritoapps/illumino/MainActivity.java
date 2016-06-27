@@ -9,7 +9,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +34,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -48,8 +54,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino Main";
-    private WebRequest webRequest;
+    //private WebRequest webRequest;
     private List<MyRoom> roomList = new ArrayList<MyRoom>();
+    private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
         }
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        webRequest = new WebRequest();
+        //webRequest = new WebRequest();
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -275,116 +283,147 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    private class WebRequest {
-        // Function calls AsyncTask.
-        // Before attempting to fetch the URL, makes sure that there is a network connection.
-        public void sendGetRequest(String stringUrl) {
-            // Gets the URL from the UI's text field.
-            //stringUrl = urlText.getText().toString();
-            ConnectivityManager connMgr = (ConnectivityManager)
-                    getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected()) {
-                new DownloadWebpageTask().execute(stringUrl);
-            } else {
-                Snackbar.make(findViewById(R.id.coordinatorLayout), "No Network Connection available", Snackbar.LENGTH_LONG).show();
-                //Toast.makeText(MainActivity.this, "No network connection available.", Toast.LENGTH_LONG).show();
-            }
+
+//    private class WebRequest {
+//        // Function calls AsyncTask.
+//        // Before attempting to fetch the URL, makes sure that there is a network connection.
+//        public void sendGetRequest(String stringUrl) {
+//            // Gets the URL from the UI's text field.
+//            //stringUrl = urlText.getText().toString();
+//            ConnectivityManager connMgr = (ConnectivityManager)
+//                    getSystemService(Context.CONNECTIVITY_SERVICE);
+//            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//            if (networkInfo != null && networkInfo.isConnected()) {
+//                new DownloadWebpageTask().execute(stringUrl);
+//            } else {
+//                Snackbar.make(findViewById(R.id.coordinatorLayout), "No Network Connection available", Snackbar.LENGTH_LONG).show();
+//                //Toast.makeText(MainActivity.this, "No network connection available.", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//
+//        // Uses AsyncTask to create a task away from the main UI thread. This task takes a
+//        // URL string and uses it to create an HttpUrlConnection. Once the connection
+//        // has been established, the AsyncTask downloads the contents of the webpage as
+//        // an InputStream. Finally, the InputStream is converted into a string, which is
+//        // displayed in the UI by the AsyncTask's onPostExecute method.
+//        private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+//            @Override
+//            protected String doInBackground(String... urls) {
+//                // params comes from the execute() call: params[0] is the url.
+//                try {
+//                    return downloadUrl(urls[0]);
+//                } catch (IOException e) {
+//                    Log.d(DEBUG_TAG, "IOException");
+//                    return "Unable to retrieve web page. URL may be invalid.";
+//                }
+//            }
+//
+//            // onPostExecute displays the results of the AsyncTask.
+//            @Override
+//            protected void onPostExecute(String result) {
+//                // check the result of the request for the specified format
+//                if (result.contains("&")) {
+//                    String[] splitResult = result.split("&");
+//                    String serverIP = splitResult[0];
+//                    String request = splitResult[1];
+//                    String response = splitResult[2];
+//
+//                    //responseMsg.setText(String.valueOf(content.indexOf("\r\n")) + "\n" + String.valueOf(content.length()));
+//                    processResponse(serverIP, request, response);
+//                } else {
+//                    String message = "Communication Error:\n" + result;
+//                    Snackbar.make(findViewById(R.id.coordinatorLayout), message, Snackbar.LENGTH_LONG).show();
+//                    //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//
+//        // Given a URL, establishes an HttpUrlConnection and retrieves
+//        // the web page content as a InputStream, which it returns as a string.
+//        private String downloadUrl(String myUrl) throws IOException {
+//            InputStream is = null;
+//            // Only display the first 500 characters of the retrieved
+//            // web page content.
+//            int len = 500;
+//
+//            try {
+//                URL url = new URL(myUrl);
+//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//                conn.setReadTimeout(10000 /* milliseconds */);
+//                conn.setConnectTimeout(15000 /* milliseconds */);
+//                conn.setRequestMethod("GET");
+//                conn.setDoInput(true);
+//                // Starts the query
+//                conn.connect();
+//                int response = conn.getResponseCode();
+//                Log.d(DEBUG_TAG, "The response is: " + response);
+//                is = conn.getInputStream();
+//
+//                // Convert the InputStream into a string
+//                String contentRaw = readIt(is, len);
+//                int contentLen = contentRaw.indexOf("\r\n");
+//                // Termination characters \r\n should be there
+//                if (contentLen != -1) {
+//                    String[] urlSplit = myUrl.split("/");
+//                    String serverIP = urlSplit[2];
+//                    String request = urlSplit[3];
+//                    String content = contentRaw.substring(0, contentLen).replace("!", "");
+//                    Log.d(DEBUG_TAG, "The content is: " + serverIP + "&" + content);
+//                    return serverIP + "&" + request + "&" + content;
+//                } else {
+//                    return "invalid response content";
+//                }
+//                // Makes sure that the InputStream is closed after the app is
+//                // finished using it.
+//            } finally {
+//                if (is != null) {
+//                    is.close();
+//                }
+//            }
+//        }
+//
+//        // Reads an InputStream and converts it to a String.
+//        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+//            Reader reader = null;
+//            reader = new InputStreamReader(stream, "UTF-8");
+//            char[] buffer = new char[len];
+//            reader.read(buffer);
+//            return new String(buffer);
+//        }
+//    }
+
+
+    public void startRequest(final String ip, final String message) {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Toast.makeText(MainActivity.this, "No network access", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        // Uses AsyncTask to create a task away from the main UI thread. This task takes a
-        // URL string and uses it to create an HttpUrlConnection. Once the connection
-        // has been established, the AsyncTask downloads the contents of the webpage as
-        // an InputStream. Finally, the InputStream is converted into a string, which is
-        // displayed in the UI by the AsyncTask's onPostExecute method.
-        private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+        final String url = "http://" + ip + "/" + message;
+        Log.d(DEBUG_TAG, "Request: " + url);
+        //webRequest.sendGetRequest(url);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
+                        //Snackbar.make(coordinatorLayout, response, Snackbar.LENGTH_LONG).show();
+                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
+                        processResponse(ip, message, response.replace("!\r\n",""));
+                    }
+                }, new Response.ErrorListener() {
             @Override
-            protected String doInBackground(String... urls) {
-                // params comes from the execute() call: params[0] is the url.
-                try {
-                    return downloadUrl(urls[0]);
-                } catch (IOException e) {
-                    Log.d(DEBUG_TAG, "IOException");
-                    return "Unable to retrieve web page. URL may be invalid.";
-                }
+            public void onErrorResponse(VolleyError error) {
+                Log.d(DEBUG_TAG, "Response FAIL!!!: " + url);
             }
+        });
 
-            // onPostExecute displays the results of the AsyncTask.
-            @Override
-            protected void onPostExecute(String result) {
-                // check the result of the request for the specified format
-                if (result.contains("&")) {
-                    String[] splitResult = result.split("&");
-                    String serverIP = splitResult[0];
-                    String request = splitResult[1];
-                    String response = splitResult[2];
-
-                    //responseMsg.setText(String.valueOf(content.indexOf("\r\n")) + "\n" + String.valueOf(content.length()));
-                    processResponse(serverIP, request, response);
-                } else {
-                    String message = "Communication Error:\n" + result;
-                    Snackbar.make(findViewById(R.id.coordinatorLayout), message, Snackbar.LENGTH_LONG).show();
-                    //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-
-        // Given a URL, establishes an HttpUrlConnection and retrieves
-        // the web page content as a InputStream, which it returns as a string.
-        private String downloadUrl(String myUrl) throws IOException {
-            InputStream is = null;
-            // Only display the first 500 characters of the retrieved
-            // web page content.
-            int len = 500;
-
-            try {
-                URL url = new URL(myUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                // Starts the query
-                conn.connect();
-                int response = conn.getResponseCode();
-                Log.d(DEBUG_TAG, "The response is: " + response);
-                is = conn.getInputStream();
-
-                // Convert the InputStream into a string
-                String contentRaw = readIt(is, len);
-                int contentLen = contentRaw.indexOf("\r\n");
-                // Termination characters \r\n should be there
-                if (contentLen != -1) {
-                    String[] urlSplit = myUrl.split("/");
-                    String serverIP = urlSplit[2];
-                    String request = urlSplit[3];
-                    String content = contentRaw.substring(0, contentLen).replace("!", "");
-                    Log.d(DEBUG_TAG, "The content is: " + serverIP + "&" + content);
-                    return serverIP + "&" + request + "&" + content;
-                } else {
-                    return "invalid response content";
-                }
-                // Makes sure that the InputStream is closed after the app is
-                // finished using it.
-            } finally {
-                if (is != null) {
-                    is.close();
-                }
-            }
-        }
-
-        // Reads an InputStream and converts it to a String.
-        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-            Reader reader = null;
-            reader = new InputStreamReader(stream, "UTF-8");
-            char[] buffer = new char[len];
-            reader.read(buffer);
-            return new String(buffer);
-        }
-    }
-
-    public void startRequest(String ip, String message) {
-        webRequest.sendGetRequest("http://" + ip + "/" + message);
+        // Add a request (in this example, called stringRequest) to your RequestQueue.
+        MyWiFi.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     // extract information from result of a WebRequest
@@ -444,15 +483,15 @@ public class MainActivity extends AppCompatActivity {
                                 room.setColor2(color);
                                 break;
                             default:
-                                Snackbar.make(findViewById(R.id.coordinatorLayout), "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
                         }
                         //Color.rgb(red, green, blue);
                     } else {
-                        Snackbar.make(findViewById(R.id.coordinatorLayout), "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
                     }
                     break;
                 default:
-                    Snackbar.make(findViewById(R.id.coordinatorLayout), "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
             }
         }
     }
