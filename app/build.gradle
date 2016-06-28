@@ -27,5 +27,6 @@ dependencies {
     //compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.android.support:design:23.4.0'
     compile 'com.google.android.gms:play-services-appindexing:9.0.2'
-    compile project(path: ':volley')
+    //compile project(path: ':volley')
+    compile 'com.android.volley:volley:1.0.0'
 }

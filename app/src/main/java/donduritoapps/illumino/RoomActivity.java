@@ -21,11 +21,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +42,7 @@ import java.net.URL;
 public class RoomActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino RoomAct";
     private CoordinatorLayout coordinatorLayout;
-    private WebRequest webRequest;
+    //private WebRequest webRequest;
 
     private MyRoom room;
     private int radioButtonSelection;
@@ -72,7 +76,7 @@ public class RoomActivity extends AppCompatActivity {
             });
         }
 
-        webRequest = new WebRequest();
+        //webRequest = new WebRequest();
 
         createOnOffSwitch();
         createAnimationSwitch();
@@ -218,67 +222,102 @@ public class RoomActivity extends AppCompatActivity {
         }
     }
 
-    public void startRequest(String ip, String message) {
-        webRequest.sendGetRequest("http://" + ip + "/" + message);
+    public void startRequest(final String ip, final String message) {
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Toast.makeText(RoomActivity.this, "No network access", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        final String url = "http://" + ip + "/" + message;
+        Log.d(DEBUG_TAG, "Request: " + url);
+        //webRequest.sendGetRequest(url);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
+                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
+                        processResponse(ip, message, response.replace("!\r\n",""));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(DEBUG_TAG, "Response FAIL!!!: " + url);
+            }
+        });
+
+        // Add a request (in this example, called stringRequest) to your RequestQueue.
+        MyWiFi.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     private void createPatternSelection() {
         // Pattern Selection
         View actionPattern = findViewById(R.id.action_Pattern);
-        actionPattern.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AppCompatDialog dialog = new AppCompatDialog(RoomActivity.this);
-                dialog.setContentView(R.layout.dialog_pattern);
-                dialog.setTitle("Pattern");
-                dialog.show();
+        if (actionPattern != null) {
+            actionPattern.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AppCompatDialog dialog = new AppCompatDialog(RoomActivity.this);
+                    dialog.setContentView(R.layout.dialog_pattern);
+                    dialog.setTitle("Pattern");
+                    dialog.show();
 
-                RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
-                radioGroup.check(radioButtonSelection);
-                Button buttonOK = (Button) dialog.findViewById(R.id.button_okay);
-                buttonOK.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
-                        int selectedId = radioGroup.getCheckedRadioButtonId();
-                        radioButtonSelection = selectedId;
-                        // find the radiobutton by returned id
-                        RadioButton radioButton = (RadioButton) dialog.findViewById(selectedId);
-                        TextView txtViewPattern = (TextView) findViewById(R.id.textView_Pattern);
-                        String pattern = radioButton.getText().toString();
-                        txtViewPattern.setText(pattern);
-                        switch (pattern) {
-                            case "Waves":
-                                startRequest(room.getIp(), "P2");
-                                break;
-                            case "Rainbow Short":
-                                startRequest(room.getIp(), "P3");
-                                break;
-                            case "Rainbow Long":
-                                startRequest(room.getIp(), "P4");
-                                break;
-                            case "Theater":
-                                startRequest(room.getIp(), "P6");
-                                break;
-                            case "Scanner":
-                                startRequest(room.getIp(), "P8");
-                                break;
-                            default:
-                                break;
+                    RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
+                    if (radioGroup == null) { return; }
+                    radioGroup.check(radioButtonSelection);
+                    Button buttonOK = (Button) dialog.findViewById(R.id.button_okay);
+                    if (buttonOK == null) { return; }
+                    buttonOK.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
+                            int selectedId = radioGroup.getCheckedRadioButtonId();
+                            radioButtonSelection = selectedId;
+                            // find the radiobutton by returned id
+                            RadioButton radioButton = (RadioButton) dialog.findViewById(selectedId);
+                            TextView txtViewPattern = (TextView) findViewById(R.id.textView_Pattern);
+                            String pattern = radioButton.getText().toString();
+                            txtViewPattern.setText(pattern);
+                            switch (pattern) {
+                                case "Waves":
+                                    startRequest(room.getIp(), "P2");
+                                    break;
+                                case "Rainbow Short":
+                                    startRequest(room.getIp(), "P3");
+                                    break;
+                                case "Rainbow Long":
+                                    startRequest(room.getIp(), "P4");
+                                    break;
+                                case "Theater":
+                                    startRequest(room.getIp(), "P6");
+                                    break;
+                                case "Scanner":
+                                    startRequest(room.getIp(), "P8");
+                                    break;
+                                default:
+                                    break;
+                            }
+                            Snackbar.make(coordinatorLayout, radioButton.getText(), Snackbar.LENGTH_SHORT)
+                                    .show();
+                            dialog.dismiss();
                         }
-                        Snackbar.make(findViewById(R.id.coordinatorLayout), radioButton.getText(), Snackbar.LENGTH_SHORT)
-                                .show();
-                        dialog.dismiss();
-                    }
-                });
+                    });
 
-                Button buttonCancel = (Button) dialog.findViewById(R.id.button_cancel);
-                buttonCancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        dialog.dismiss();
+                    Button buttonCancel = (Button) dialog.findViewById(R.id.button_cancel);
+                    if (buttonCancel != null) {
+                        buttonCancel.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+            });
+
+        }
     }
 
     private void createOnOffSwitch() {
@@ -306,6 +345,7 @@ public class RoomActivity extends AppCompatActivity {
     private void createAnimationSwitch() {
         //Switch Button for Animation
         SwitchCompat switchAnimation = (SwitchCompat) findViewById(R.id.switch_animation);
+        if (switchAnimation == null) { return; }
         switchAnimation.setEnabled(true);
         switchAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
