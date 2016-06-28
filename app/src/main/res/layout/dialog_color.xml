@@ -5,12 +5,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Color 1"
-        android:id="@+id/textView_title"
+        android:layout_width="144dp"
+        android:layout_height="48dp"
+        android:id="@+id/textView_current_color"
         android:layout_gravity="center_horizontal"
-        style="@style/TextAppearance.AppCompat.Title" />
+        style="@style/TextAppearance.AppCompat.Title"
+        android:background="@color/colorPrimary" />
 
     <ImageView
         android:layout_width="300dp"

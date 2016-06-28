@@ -2,7 +2,10 @@ package donduritoapps.illumino;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -17,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -395,8 +399,31 @@ public class RoomActivity extends AppCompatActivity {
                 dialog.setTitle(button_color.getText());
                 dialog.show();
 
-                ImageView colorWheel = (ImageView) dialog.findViewById(R.id.imageView_color_wheel);
-                //colorWheel.setOnTouchListen;
+                final ImageView colorWheel = (ImageView) dialog.findViewById(R.id.imageView_color_wheel);
+                if (colorWheel == null) {return;}
+
+                Drawable imgDrawable = (colorWheel).getDrawable();
+                final Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
+                colorWheel.setOnTouchListener(new View.OnTouchListener(){
+                @Override
+                public boolean onTouch(View v, MotionEvent event){
+                    int x = (int)event.getX();
+                    int y = (int)event.getY();
+                    int pixel = bitmap.getPixel(x,y);
+
+                    //then do what you want with the pixel data, e.g
+                    int redValue = Color.red(pixel);
+                    int blueValue = Color.blue(pixel);
+                    int greenValue = Color.green(pixel);
+                    Snackbar.make(coordinatorLayout, String.valueOf(pixel), Snackbar.LENGTH_LONG).show();
+                    TextView currentColor = (TextView) dialog.findViewById(R.id.textView_current_color);
+                    if (currentColor != null) {
+                        currentColor.setBackgroundColor(pixel);
+                    }
+
+                    return false;
+                }
+            });
 
                 Button buttonOK = (Button) dialog.findViewById(R.id.button_ok);
                 buttonOK.setOnClickListener(new View.OnClickListener() {
