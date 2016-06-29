@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -399,31 +400,49 @@ public class RoomActivity extends AppCompatActivity {
                 dialog.setTitle(button_color.getText());
                 dialog.show();
 
-                final ImageView colorWheel = (ImageView) dialog.findViewById(R.id.imageView_color_wheel);
-                if (colorWheel == null) {return;}
+                ImageView colorWheel = (ImageView) dialog.findViewById(R.id.imageView_color_wheel);
 
-                Drawable imgDrawable = (colorWheel).getDrawable();
-                final Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
-                colorWheel.setOnTouchListener(new View.OnTouchListener(){
-                @Override
-                public boolean onTouch(View v, MotionEvent event){
-                    int x = (int)event.getX();
-                    int y = (int)event.getY();
-                    int pixel = bitmap.getPixel(x,y);
+                if (colorWheel == null) return;
+                colorWheel.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        float eventX = event.getX();
+                        float eventY = event.getY();
+                        float[] eventXY = new float[] {eventX, eventY};
 
-                    //then do what you want with the pixel data, e.g
-                    int redValue = Color.red(pixel);
-                    int blueValue = Color.blue(pixel);
-                    int greenValue = Color.green(pixel);
-                    Snackbar.make(coordinatorLayout, String.valueOf(pixel), Snackbar.LENGTH_LONG).show();
-                    TextView currentColor = (TextView) dialog.findViewById(R.id.textView_current_color);
-                    if (currentColor != null) {
-                        currentColor.setBackgroundColor(pixel);
+                        Matrix invertMatrix = new Matrix();
+                        ((ImageView)v).getImageMatrix().invert(invertMatrix);
+                        invertMatrix.mapPoints(eventXY);
+                        int x = (int) eventXY[0];
+                        int y = (int) eventXY[1];
+
+                        Drawable imgDrawable = ((ImageView)v).getDrawable();
+                        Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
+
+                        // Limit x, y, range within bitmap
+                        if (x < 0)
+                            x = 0;
+                        else if (x > bitmap.getWidth())
+                            x = bitmap.getWidth() - 1;
+
+                        if (y < 0)
+                            y = 0;
+                        else if (y > bitmap.getHeight())
+                            y = bitmap.getHeight() - 1;
+
+                        int touchedRGB = bitmap.getPixel(x, y);
+
+                        TextView textView_currentColor = (TextView) dialog.findViewById(R.id.textView_current_color);
+                        if (textView_currentColor != null)
+                            textView_currentColor.setBackgroundColor(touchedRGB);
+
+                        Log.d(DEBUG_TAG, String.valueOf(Color.red(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.valueOf(Color.green(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.valueOf(Color.blue(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.valueOf(Color.alpha(touchedRGB)));
+                        return false;
                     }
-
-                    return false;
-                }
-            });
+                });
 
                 Button buttonOK = (Button) dialog.findViewById(R.id.button_ok);
                 buttonOK.setOnClickListener(new View.OnClickListener() {
