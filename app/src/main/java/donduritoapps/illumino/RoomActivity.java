@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +88,7 @@ public class RoomActivity extends AppCompatActivity {
         createAnimationSwitch();
         createColorButtons();
         createPatternSelection();
+        createSliders();
 
         refreshActivity();
     }
@@ -386,12 +388,23 @@ public class RoomActivity extends AppCompatActivity {
     private void createColorButtons() {
         // Button Color 1
         Button button_color1 = (Button) findViewById(R.id.button_color1);
-        colorButtonListener(button_color1);
+        colorButtonListener(1, button_color1);
         Button button_color2 = (Button) findViewById(R.id.button_color2);
-        colorButtonListener(button_color2);
+        colorButtonListener(2, button_color2);
+
+        Button button_colorSwap = (Button) findViewById(R.id.button_color_swap);
+        if (button_colorSwap == null) return;
+        button_colorSwap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startRequest(room.getIp(), "P7");
+            }
+        });
+
+
     }
 
-    private void colorButtonListener(final Button button_color) {
+    private void colorButtonListener(final int color_number, final Button button_color) {
         button_color.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -433,22 +446,38 @@ public class RoomActivity extends AppCompatActivity {
                         int touchedRGB = bitmap.getPixel(x, y);
 
                         TextView textView_currentColor = (TextView) dialog.findViewById(R.id.textView_current_color);
-                        if (textView_currentColor != null)
+                        if (textView_currentColor != null) {
                             textView_currentColor.setBackgroundColor(touchedRGB);
-
-                        Log.d(DEBUG_TAG, String.valueOf(Color.red(touchedRGB)));
-                        Log.d(DEBUG_TAG, String.valueOf(Color.green(touchedRGB)));
-                        Log.d(DEBUG_TAG, String.valueOf(Color.blue(touchedRGB)));
-                        Log.d(DEBUG_TAG, String.valueOf(Color.alpha(touchedRGB)));
+                            textView_currentColor.setTextColor(touchedRGB);
+                        }
+                        Log.d(DEBUG_TAG, String.format("%03d", Color.red(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.format("%03d", Color.green(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.format("%03d", Color.blue(touchedRGB)));
+                        Log.d(DEBUG_TAG, String.format("%03d", Color.alpha(touchedRGB)));
                         return false;
                     }
                 });
 
                 Button buttonOK = (Button) dialog.findViewById(R.id.button_ok);
+                if (buttonOK == null) return;
                 buttonOK.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        dialog.dismiss();
+                        int selectedColor = 0;
+                        TextView textView_currentColor = (TextView) dialog.findViewById(R.id.textView_current_color);
+                        if (textView_currentColor != null) {
+                            selectedColor = textView_currentColor.getCurrentTextColor();
+                        }
+
+                        String message = String.format("C%1d%03d%03d%03d",
+                                color_number,
+                                Color.red(selectedColor),
+                                Color.green(selectedColor),
+                                Color.blue(selectedColor));
+
+                        startRequest(room.getIp(), message);
+                        Log.d(DEBUG_TAG, message);
                         Snackbar.make(coordinatorLayout, "OK", Snackbar.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
 
@@ -462,6 +491,32 @@ public class RoomActivity extends AppCompatActivity {
         });
     }
 
+    private void createSliders() {
+        SeekBar slider_interval = (SeekBar) findViewById(R.id.seekBar_Interval);
+        if (slider_interval == null) return;
+        slider_interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            TextView textView_interval = (TextView) findViewById(R.id.textView_interval);
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                double interval = Math.exp(0.085 * progress);
+                textView_interval.setText(String.format("%.0fms", interval));
+                Log.d(DEBUG_TAG, String.valueOf(interval));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int progress = seekBar.getProgress();
+                double interval = Math.exp(0.085 * progress);
+                String message = String.format("I%.0f", interval);
+                startRequest(room.getIp(), message);
+            }
+        });
+    }
     // extract information from result of a WebRequest
     private void processResponse(String serverIP, String request, String response) {
         // resend request send if failed
@@ -533,6 +588,9 @@ public class RoomActivity extends AppCompatActivity {
                     } else {
                         Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
                     }
+                    break;
+                case 'I':
+                    //double
                     break;
                 default:
                     Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();

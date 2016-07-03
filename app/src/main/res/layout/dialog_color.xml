@@ -13,10 +13,10 @@
         android:background="@color/colorPrimary" />
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageView_color_wheel"
-        android:src="@drawable/color_wheel_730"
+        android:src="@drawable/color_room"
         android:layout_margin="16dp" />
 
     <LinearLayout

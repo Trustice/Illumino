@@ -46,34 +46,6 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Animation"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentStart="true"
-            android:paddingLeft="16dp"
-            android:layout_centerVertical="true" />
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_animation"
-            android:layout_gravity="center_vertical"
-            android:checked="false"
-            android:enabled="false"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_centerVertical="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="72dp"
         android:id="@+id/action_Pattern">
 
@@ -94,12 +66,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Muster"
+            android:text="Animation"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="16dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:paddingTop="20dp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switch_animation"
+            android:layout_gravity="center_vertical"
+            android:checked="false"
+            android:enabled="false"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
@@ -170,7 +153,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp">
+        android:layout_height="104dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,7 +164,8 @@
             android:paddingLeft="16dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:paddingTop="20dp" />
+            android:paddingTop="20dp"
+            android:id="@+id/textView2" />
 
         <SeekBar
             android:layout_width="match_parent"
@@ -192,6 +176,14 @@
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100ms"
+            android:id="@+id/textView_interval"
+            android:layout_below="@+id/textView2"
+            android:layout_alignStart="@+id/seekBar_Interval" />
     </RelativeLayout>
 
     <View
