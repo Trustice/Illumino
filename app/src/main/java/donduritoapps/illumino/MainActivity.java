@@ -279,118 +279,11 @@ public class MainActivity extends AppCompatActivity {
             String ip = roomList.get(i).getIp();
             startRequest(ip, "P_");
             startRequest(ip, "C1_");
+            startRequest(ip, "T_");
+            startRequest(ip, "H_");
         }
         swipeRefreshLayout.setRefreshing(false);
     }
-
-
-//    private class WebRequest {
-//        // Function calls AsyncTask.
-//        // Before attempting to fetch the URL, makes sure that there is a network connection.
-//        public void sendGetRequest(String stringUrl) {
-//            // Gets the URL from the UI's text field.
-//            //stringUrl = urlText.getText().toString();
-//            ConnectivityManager connMgr = (ConnectivityManager)
-//                    getSystemService(Context.CONNECTIVITY_SERVICE);
-//            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-//            if (networkInfo != null && networkInfo.isConnected()) {
-//                new DownloadWebpageTask().execute(stringUrl);
-//            } else {
-//                Snackbar.make(findViewById(R.id.coordinatorLayout), "No Network Connection available", Snackbar.LENGTH_LONG).show();
-//                //Toast.makeText(MainActivity.this, "No network connection available.", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//
-//        // Uses AsyncTask to create a task away from the main UI thread. This task takes a
-//        // URL string and uses it to create an HttpUrlConnection. Once the connection
-//        // has been established, the AsyncTask downloads the contents of the webpage as
-//        // an InputStream. Finally, the InputStream is converted into a string, which is
-//        // displayed in the UI by the AsyncTask's onPostExecute method.
-//        private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
-//            @Override
-//            protected String doInBackground(String... urls) {
-//                // params comes from the execute() call: params[0] is the url.
-//                try {
-//                    return downloadUrl(urls[0]);
-//                } catch (IOException e) {
-//                    Log.d(DEBUG_TAG, "IOException");
-//                    return "Unable to retrieve web page. URL may be invalid.";
-//                }
-//            }
-//
-//            // onPostExecute displays the results of the AsyncTask.
-//            @Override
-//            protected void onPostExecute(String result) {
-//                // check the result of the request for the specified format
-//                if (result.contains("&")) {
-//                    String[] splitResult = result.split("&");
-//                    String serverIP = splitResult[0];
-//                    String request = splitResult[1];
-//                    String response = splitResult[2];
-//
-//                    //responseMsg.setText(String.valueOf(content.indexOf("\r\n")) + "\n" + String.valueOf(content.length()));
-//                    processResponse(serverIP, request, response);
-//                } else {
-//                    String message = "Communication Error:\n" + result;
-//                    Snackbar.make(findViewById(R.id.coordinatorLayout), message, Snackbar.LENGTH_LONG).show();
-//                    //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }
-//
-//        // Given a URL, establishes an HttpUrlConnection and retrieves
-//        // the web page content as a InputStream, which it returns as a string.
-//        private String downloadUrl(String myUrl) throws IOException {
-//            InputStream is = null;
-//            // Only display the first 500 characters of the retrieved
-//            // web page content.
-//            int len = 500;
-//
-//            try {
-//                URL url = new URL(myUrl);
-//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                conn.setReadTimeout(10000 /* milliseconds */);
-//                conn.setConnectTimeout(15000 /* milliseconds */);
-//                conn.setRequestMethod("GET");
-//                conn.setDoInput(true);
-//                // Starts the query
-//                conn.connect();
-//                int response = conn.getResponseCode();
-//                Log.d(DEBUG_TAG, "The response is: " + response);
-//                is = conn.getInputStream();
-//
-//                // Convert the InputStream into a string
-//                String contentRaw = readIt(is, len);
-//                int contentLen = contentRaw.indexOf("\r\n");
-//                // Termination characters \r\n should be there
-//                if (contentLen != -1) {
-//                    String[] urlSplit = myUrl.split("/");
-//                    String serverIP = urlSplit[2];
-//                    String request = urlSplit[3];
-//                    String content = contentRaw.substring(0, contentLen).replace("!", "");
-//                    Log.d(DEBUG_TAG, "The content is: " + serverIP + "&" + content);
-//                    return serverIP + "&" + request + "&" + content;
-//                } else {
-//                    return "invalid response content";
-//                }
-//                // Makes sure that the InputStream is closed after the app is
-//                // finished using it.
-//            } finally {
-//                if (is != null) {
-//                    is.close();
-//                }
-//            }
-//        }
-//
-//        // Reads an InputStream and converts it to a String.
-//        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-//            Reader reader = null;
-//            reader = new InputStreamReader(stream, "UTF-8");
-//            char[] buffer = new char[len];
-//            reader.read(buffer);
-//            return new String(buffer);
-//        }
-//    }
 
 
     public void startRequest(final String ip, final String message) {
@@ -489,6 +382,15 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
                     }
+                    break;
+                case 'T':   // Temperature
+                    float t = Float.parseFloat(value);
+                    TextView textView_temperature = (TextView) listChild.findViewById(R.id.item_txtTemp);
+                    textView_temperature.setText(value + " °C / ");
+                    break;
+                case 'H':   // Humidity
+                    TextView textView_humidity = (TextView) listChild.findViewById(R.id.item_txtHumid);
+                    textView_humidity.setText(value + " % r.h.");
                     break;
                 default:
                     Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
