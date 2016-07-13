@@ -231,7 +231,7 @@ public class RoomActivity extends AppCompatActivity {
                         startRequest(room.getIp(), "P98");
                     }
                 } else {
-                    if (!pattern.equals("99") || !pattern.equals("97")) {
+                    if (!pattern.equals("99") && !pattern.equals("97")) {
                         startRequest(room.getIp(), "P99");
                     }
                 }
@@ -266,6 +266,8 @@ public class RoomActivity extends AppCompatActivity {
                         case "5":
                         case "7":
                         case "98":
+                        case "97":
+                        case "99":
                             break;
                         default:
                             startRequest(room.getIp(), "P5");
@@ -420,63 +422,10 @@ public class RoomActivity extends AppCompatActivity {
             String value = response.substring(1);
             switch (state) {
                 case 'P':   // process as Pattern
-                    room.setPattern(value);
-
-                    // get button view from card to change tint
-
-                    SwitchCompat switchCompatOnOff = (SwitchCompat) findViewById(R.id.switch_on_off);
-                    switchCompatOnOff.setEnabled(true);
-                    SwitchCompat switchCompatAnimation = (SwitchCompat) findViewById(R.id.switch_animation);
-                    switchCompatAnimation.setEnabled(true);
-                    switch (value) {
-                        case "97":
-                        case "99":
-                            switchCompatOnOff.setChecked(false);
-                            switchCompatAnimation.setChecked(false);
-                            break;
-                        case "1":
-                        case "5":
-                        case "7":
-                        case "98":
-                            switchCompatOnOff.setChecked(true);
-                            switchCompatAnimation.setChecked(false);
-                            break;
-                        default:
-                            switchCompatOnOff.setChecked(true);
-                            switchCompatAnimation.setChecked(true);
-                            break;
-                    }
+                    processPattern(value);
                     break;
                 case 'C':   // Color
-                    if (value.length() == 10) {
-                        char colorNumber = value.charAt(0);
-                        int red = Integer.parseInt(value.substring(1, 4));
-                        int green = Integer.parseInt(value.substring(4, 7));
-                        int blue = Integer.parseInt(value.substring(7, 10));
-
-                        int color = Color.rgb(red, green, blue);
-
-
-                        switch (colorNumber) {
-                            case '1':
-                                // get color view from card to change tint
-                                Button button_color1 = (Button) findViewById(R.id.button_color1);
-                                room.setColor1(color);
-                                button_color1.setBackgroundColor(color);
-                                break;
-                            case '2':
-                                // get color view from card to change tint
-                                Button button_color2 = (Button) findViewById(R.id.button_color2);
-                                room.setColor2(color);
-                                button_color2.setBackgroundColor(color);
-                                break;
-                            default:
-                                Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
-                        }
-                        //Color.rgb(red, green, blue);
-                    } else {
-                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
-                    }
+                    processColor(value);
                     break;
                 case 'I':
                     //double
@@ -487,5 +436,80 @@ public class RoomActivity extends AppCompatActivity {
         }
     }
 
+    private void processPattern(String value) {
+        room.setPattern(value);
 
+        // get button view from card to change tint
+        SwitchCompat switchCompatOnOff = (SwitchCompat) findViewById(R.id.switch_on_off);
+        switchCompatOnOff.setEnabled(true);
+        SwitchCompat switchCompatAnimation = (SwitchCompat) findViewById(R.id.switch_animation);
+        switchCompatAnimation.setEnabled(true);
+        switch (value) {
+            case "97":
+            case "99":
+                switchCompatOnOff.setChecked(false);
+                switchCompatAnimation.setChecked(false);
+                break;
+            case "1":
+            case "5":
+            case "7":
+            case "98":
+                switchCompatOnOff.setChecked(true);
+                switchCompatAnimation.setChecked(false);
+                break;
+            default:
+                switchCompatOnOff.setChecked(true);
+                switchCompatAnimation.setChecked(true);
+                break;
+        }
+
+        TextView txtViewPattern = (TextView) findViewById(R.id.textView_Pattern);
+        String pattern;// = radioButton.getText().toString();
+        switch (value) {
+            case "2":
+                txtViewPattern.setText("Waves");
+            case "3":
+                txtViewPattern.setText("Rainbow Short");
+            case "4":
+                txtViewPattern.setText("Rainbow Long");
+            case "6":
+                txtViewPattern.setText("Theater");
+            case "8":
+                txtViewPattern.setText("Scanner");
+            default:
+                txtViewPattern.setText("-");
+                break;
+        }
+    }
+
+    private void processColor(String value) {
+        if (value.length() == 10) {
+            char colorNumber = value.charAt(0);
+            int red = Integer.parseInt(value.substring(1, 4));
+            int green = Integer.parseInt(value.substring(4, 7));
+            int blue = Integer.parseInt(value.substring(7, 10));
+
+            int color = Color.rgb(red, green, blue);
+
+
+            switch (colorNumber) {
+                case '1':
+                    // get color view from card to change tint
+                    Button button_color1 = (Button) findViewById(R.id.button_color1);
+                    room.setColor1(color);
+                    button_color1.setBackgroundColor(color);
+                    break;
+                case '2':
+                    // get color view from card to change tint
+                    Button button_color2 = (Button) findViewById(R.id.button_color2);
+                    room.setColor2(color);
+                    button_color2.setBackgroundColor(color);
+                    break;
+                default:
+                    Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
+            }
+        } else {
+            Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
+        }
+    }
 }

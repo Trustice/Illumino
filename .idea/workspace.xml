@@ -13,16 +13,13 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/cache.properties.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/outputFileStates.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.10/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.10/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_view.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_view.xml" />
     </list>
     <ignored path="Illumino.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,10 +45,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="395" column="56" selection-start-line="395" selection-start-column="56" selection-end-line="395" selection-end-column="56" />
+              <caret line="393" column="26" selection-start-line="393" selection-start-column="26" selection-end-line="393" selection-end-column="26" />
               <folding>
-                <element signature="e#6114#6582#0" expanded="true" />
-                <element signature="e#6581#6582#0" expanded="true" />
                 <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
                 <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -61,20 +56,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RoomActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RoomActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="290" column="49" selection-start-line="290" selection-start-column="49" selection-end-line="290" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.6573913">
+              <caret line="240" column="5" selection-start-line="240" selection-start-column="5" selection-end-line="240" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
                 <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
                 <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-                <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-                <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+                <element signature="e#9346#9998#0" expanded="true" />
+                <element signature="e#9997#9998#0" expanded="true" />
                 <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+                <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
                 <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+                <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+                <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -82,53 +80,53 @@
       </file>
       <file leaf-file-name="content_room.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-          <provider selected="true" editor-type-id="android-designer">
-            <state />
-          </provider>
           <provider editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
+          </provider>
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="content_main.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
-          <provider selected="true" editor-type-id="android-designer">
-            <state />
-          </provider>
           <provider editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="item_view.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_view.xml">
-          <provider editor-type-id="android-designer">
+          <provider selected="true" editor-type-id="android-designer">
             <state />
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="item_view.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5833333">
-              <caret line="79" column="65" selection-start-line="79" selection-start-column="65" selection-end-line="79" selection-end-column="65" />
+            <state vertical-scroll-proportion="-6.8">
+              <caret line="73" column="68" selection-start-line="73" selection-start-column="68" selection-end-line="73" selection-end-column="68" />
               <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="dialog_color.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-          <provider selected="true" editor-type-id="android-designer">
-            <state />
-          </provider>
           <provider editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
+          </provider>
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
           </provider>
         </entry>
       </file>
@@ -1820,9 +1818,9 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/content_pref_room.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/content_room.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/item_view.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java" />
       </list>
     </option>
   </component>
@@ -1857,7 +1855,37 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Illumino" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Illumino" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1878,73 +1906,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Illumino" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Illumino" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Illumino" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Illumino" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scratches" />
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2228,18 +2190,27 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925472" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.49763992" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32369298" sideWeight="0.5021322" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925472" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32925472" sideWeight="0.4978678" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925472" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2248,6 +2219,7 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15778251" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2259,7 +2231,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2275,7 +2246,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2283,10 +2254,85 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="395" column="56" selection-start-line="395" selection-start-column="56" selection-end-line="395" selection-end-column="56" />
+          <folding>
+            <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#startRequest#0;class#MainActivity#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="290" column="49" selection-start-line="290" selection-start-column="49" selection-end-line="290" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
+            <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="79" column="65" selection-start-line="79" selection-start-column="65" selection-end-line="79" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2304,34 +2350,37 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2339,8 +2388,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2358,34 +2405,37 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2393,8 +2443,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2412,34 +2460,37 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2447,8 +2498,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2466,34 +2515,37 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2501,8 +2553,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2520,23 +2570,26 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2544,8 +2597,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2563,23 +2614,26 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
@@ -2587,8 +2641,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="165" column="8" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="8" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2606,10 +2658,13 @@
             <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
             <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
             <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2664,73 +2719,65 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_pref_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="290" column="49" selection-start-line="290" selection-start-column="49" selection-end-line="290" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createPatternSelection#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createOnOffSwitch#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
-            <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
-          </folding>
-        </state>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_room.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_color.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.8">
+          <caret line="73" column="68" selection-start-line="73" selection-start-column="68" selection-end-line="73" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="395" column="56" selection-start-line="395" selection-start-column="56" selection-end-line="395" selection-end-column="56" />
+          <caret line="393" column="26" selection-start-line="393" selection-start-column="26" selection-end-line="393" selection-end-column="26" />
           <folding>
-            <element signature="e#6114#6582#0" expanded="true" />
-            <element signature="e#6581#6582#0" expanded="true" />
             <element signature="method#onStart#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
             <element signature="class#MyListAdapter#0;class#MainActivity#0" expanded="false" />
@@ -2739,14 +2786,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_view.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/donduritoapps/illumino/RoomActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5833333">
-          <caret line="79" column="65" selection-start-line="79" selection-start-column="65" selection-end-line="79" selection-end-column="65" />
-          <folding />
+        <state vertical-scroll-proportion="0.6573913">
+          <caret line="240" column="5" selection-start-line="240" selection-start-column="5" selection-end-line="240" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#refreshActivity#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#RoomActivity#0" expanded="false" />
+            <element signature="e#9346#9998#0" expanded="true" />
+            <element signature="e#9997#9998#0" expanded="true" />
+            <element signature="method#createAnimationSwitch#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createColorButtons#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#colorButtonListener#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#createSliders#0;class#RoomActivity#0" expanded="false" />
+            <element signature="method#processColor#0;class#RoomActivity#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
