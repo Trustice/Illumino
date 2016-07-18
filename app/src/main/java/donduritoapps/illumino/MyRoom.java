@@ -12,15 +12,13 @@ import android.widget.TextView;
 public class MyRoom {
     //
     private String name, ip, pattern;
-    private int iconID, color1, color2;
+    private int iconID, color1, color2, interval;
 
     public MyRoom(String name, String ip, int iconID) {
         super();
         this.name = name;
         this.iconID = iconID;
         this.ip = ip;
-
-
     }
 
     public String getName() {
@@ -44,6 +42,14 @@ public class MyRoom {
             this.pattern = value;
             Log.d("+++ Illumino", this.pattern);
         }
+    }
+
+    public int getInterval() {
+        return this.interval;
+    }
+
+    public void setInterval(int value) {
+        this.interval = value;
     }
 
     public void setColor1(int color) {

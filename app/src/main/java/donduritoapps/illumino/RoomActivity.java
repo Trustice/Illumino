@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -35,7 +36,10 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,6 +98,7 @@ public class RoomActivity extends AppCompatActivity {
         startRequest(room.getIp(), "P_");
         startRequest(room.getIp(), "C1_");
         startRequest(room.getIp(), "C2_");
+        startRequest(room.getIp(), "I_");
     }
 
     @Override
@@ -389,7 +394,7 @@ public class RoomActivity extends AppCompatActivity {
             TextView textView_interval = (TextView) findViewById(R.id.textView_interval);
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                double interval = Math.exp(0.085 * progress);
+                double interval = Math.exp(0.08517 * progress);
                 textView_interval.setText(String.format("%.0fms", interval));
                 Log.d(DEBUG_TAG, String.valueOf(interval));
             }
@@ -402,7 +407,7 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int progress = seekBar.getProgress();
-                double interval = Math.exp(0.085 * progress);
+                double interval = Math.exp(0.08517 * progress);
                 String message = String.format("I%.0f", interval);
                 startRequest(room.getIp(), message);
             }
@@ -412,7 +417,8 @@ public class RoomActivity extends AppCompatActivity {
     private void processResponse(String serverIP, String request, String response) {
         // resend request send if failed
         if (!request.contains("_") && !response.equals(request)) {
-            startRequest(serverIP, request);
+            //startRequest(serverIP, request);
+            Snackbar.make(coordinatorLayout, "Request Error: " + request + "\nresponse: " + response, Snackbar.LENGTH_LONG).show();
         } else {
             if (!room.getIp().equals(serverIP)) {
                     return;
@@ -428,7 +434,12 @@ public class RoomActivity extends AppCompatActivity {
                     processColor(value);
                     break;
                 case 'I':
-                    //double
+                    double progress = 11.74096 * Math.log(Integer.parseInt(value));
+                    room.setInterval((int) progress);
+                    Log.d(DEBUG_TAG, "progress: " + progress);
+                    SeekBar slider_interval = (SeekBar) findViewById(R.id.seekBar_Interval);
+                    if (slider_interval == null) return;
+                    slider_interval.setProgress((int) progress);
                     break;
                 default:
                     Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
@@ -464,22 +475,28 @@ public class RoomActivity extends AppCompatActivity {
         }
 
         TextView txtViewPattern = (TextView) findViewById(R.id.textView_Pattern);
-        String pattern;// = radioButton.getText().toString();
+        String pattern;
         switch (value) {
             case "2":
-                txtViewPattern.setText("Waves");
+                pattern = "Waves";
+                break;
             case "3":
-                txtViewPattern.setText("Rainbow Short");
+                pattern = "Rainbow Short";
+                break;
             case "4":
-                txtViewPattern.setText("Rainbow Long");
+                pattern = "Rainbow Long";
+                break;
             case "6":
-                txtViewPattern.setText("Theater");
+                pattern = "Theater";
+                break;
             case "8":
-                txtViewPattern.setText("Scanner");
+                pattern = "Scanner";
+                break;
             default:
-                txtViewPattern.setText("-");
+                pattern = "-";
                 break;
         }
+        txtViewPattern.setText(pattern);
     }
 
     private void processColor(String value) {
@@ -511,5 +528,28 @@ public class RoomActivity extends AppCompatActivity {
         } else {
             Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void getVolkszaehlerData() {
+        String url = "http://my-json-feed";
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(DEBUG_TAG, "Response: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+// Access the RequestQueue through your singleton class.
+        MyWiFi.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 }
