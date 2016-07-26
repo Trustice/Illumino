@@ -8,4 +8,5 @@
     <color name="colorIconActive">#FFFFFFFF</color>
     <color name="colorIconInactive">#4DFFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparent">#00FFFFFF</color>
 </resources>

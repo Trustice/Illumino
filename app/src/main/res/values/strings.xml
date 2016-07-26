@@ -7,4 +7,10 @@
     <string name="action_delete_list">Delete</string>
     <string name="title_activity_room">RoomActivity</string>
     <string name="title_activity_pref_room">PrefRoomActivity</string>
+    <string name="title_activity_chart">ChartActivity</string>
+    <string name="title_activity_color">ColorActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

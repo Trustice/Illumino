@@ -158,11 +158,13 @@ public class MainActivity extends AppCompatActivity {
     private void populateListView() {
         ArrayAdapter<MyRoom> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.roomsListView);
+        if (list == null) return;
         list.setAdapter(adapter);
     }
 
     private void registerClickCallback() {
         ListView list = (ListView) findViewById(R.id.roomsListView);
+        if (list == null) return;
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
