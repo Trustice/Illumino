@@ -13,8 +13,11 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -54,10 +57,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino Main";
-    //private WebRequest webRequest;
+
     private List<MyRoom> roomList = new ArrayList<MyRoom>();
     private CoordinatorLayout coordinatorLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle drawerToggle;
+    NavigationView navigationView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -71,23 +78,57 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
+        setSupportActionBar(toolbar);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-        swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        refreshActivity();
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
+        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.AUF, R.string.ZU);
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        populateRoomList();
+        navigationView = (NavigationView) findViewById(R.id.navView);
+        Menu menu = navigationView.getMenu();
+        menu.add("Übersicht");
+        for (int i = 0; i < roomList.size(); i++) {
+            menu.add(roomList.get(i).getName());
+        }
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Log.d(DEBUG_TAG, item.toString());
+
+                if (item.toString() == "Übersicht") {
+
+                }
+                else {
+                    for (int i = 0; i < roomList.size(); i++) {
+                        if (item.toString() == roomList.get(i).getName()) {
+                            RoomFragment roomFragment = new RoomFragment().newInstance(
+                                    roomList.get(i).getName(),
+                                    roomList.get(i).getIp());
+
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, roomFragment)
+                                    .commit();
+                        }
                     }
                 }
-        );
 
-        //webRequest = new WebRequest();
+                drawerLayout.closeDrawers();
+                item.setChecked(true);
 
+                return false;
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        drawerToggle.syncState();
+
+        RoomsFragment roomsFragment = new RoomsFragment().newInstance();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, roomsFragment).commit();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -98,19 +139,16 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        populateRoomList();
-        populateListView();
-        registerClickCallback();
+//        populateListView();
+//        registerClickCallback();
 
-        refreshActivity();
+//        refreshActivity();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem item = menu.findItem(R.id.action_save);
-        item.setVisible(false);
         return true;
     }
 
@@ -135,14 +173,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(homeIntent);
         }
 
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     private void populateRoomList() {
-//        roomList.add(new MyRoom("Küche", "192.168.178.26", R.drawable.ic_restaurant_menu_white_24dp));
-//        roomList.add(new MyRoom("Test", "192.168.178.34", R.drawable.ic_build_white_24dp));
-
-//        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         roomList.clear();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d(DEBUG_TAG, String.valueOf(sharedPref.getInt("ROOM_COUNT", 0)));
@@ -155,26 +193,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void populateListView() {
-        ArrayAdapter<MyRoom> adapter = new MyListAdapter();
-        ListView list = (ListView) findViewById(R.id.roomsListView);
-        if (list == null) return;
-        list.setAdapter(adapter);
-    }
-
-    private void registerClickCallback() {
-        ListView list = (ListView) findViewById(R.id.roomsListView);
-        if (list == null) return;
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MyRoom clickedRoom = roomList.get(position);
-                String message = "You clicked position " + position
-                        + " Which is car make " + clickedRoom.getName();
-                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//    private void populateListView() {
+//        ArrayAdapter<MyRoom> adapter = new MyListAdapter();
+//        ListView list = (ListView) findViewById(R.id.roomsListView);
+//        if (list == null) return;
+//        list.setAdapter(adapter);
+//    }
+//
+//    private void registerClickCallback() {
+//        ListView list = (ListView) findViewById(R.id.roomsListView);
+//        if (list == null) return;
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                MyRoom clickedRoom = roomList.get(position);
+//                String message = "You clicked position " + position
+//                        + " Which is car make " + clickedRoom.getName();
+//                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
     @Override
     public void onStart() {
@@ -216,189 +254,189 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    private class MyListAdapter extends ArrayAdapter<MyRoom> {
-        public MyListAdapter() {
-            super(MainActivity.this, R.layout.item_view, roomList);
-        }
-
-        @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
-            // Make sure we have a view to work with (may have been given null)
-            View itemView = convertView;
-            if (itemView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
-            }
-
-            // Find the room to work with.
-            final MyRoom currentRoom = roomList.get(position);
-
-            RelativeLayout roomAction = (RelativeLayout) itemView.findViewById(R.id.roomAction);
-            roomAction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Toast.makeText(MainActivity.this, "OKKKKK", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, RoomActivity.class);
-                    intent.putExtra("ROOM_IP", currentRoom.getIp());
-                    intent.putExtra("ROOM_NAME", currentRoom.getName());
-                    startActivity(intent);
-                }
-            });
-
-            // Fill the view
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
-            imageView.setImageResource(currentRoom.getIconID());
-
-            // Name:
-            TextView nameText = (TextView) itemView.findViewById(R.id.item_txtName);
-            nameText.setText(currentRoom.getName());
-
-            //Switch Button for ON - OFF
-            SwitchCompat switchCompat = (SwitchCompat) itemView.findViewById(R.id.item_switch);
-            switchCompat.setEnabled(false);
-            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    String pattern = currentRoom.getPattern();
-                    if (isChecked) {
-                        if (pattern.equals("99") || pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P98");
-                        }
-                    } else {
-                        if (!pattern.equals("99") || !pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P99");
-                        }
-                    }
-                }
-            });
-
-
-            return itemView;
-        }
-    }
-
-    private void refreshActivity() {
-        for (int i = 0; i < roomList.size(); i++) {
-            String ip = roomList.get(i).getIp();
-            startRequest(ip, "P_");
-            startRequest(ip, "C1_");
-            startRequest(ip, "T_");
-            startRequest(ip, "H_");
-        }
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-
-    public void startRequest(final String ip, final String message) {
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo == null || !networkInfo.isConnected()) {
-            Toast.makeText(MainActivity.this, "No network access", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        final String url = "http://" + ip + "/" + message;
-        Log.d(DEBUG_TAG, "Request: " + url);
-        //webRequest.sendGetRequest(url);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
-                        //Snackbar.make(coordinatorLayout, response, Snackbar.LENGTH_LONG).show();
-                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
-                        processResponse(ip, message, response.replace("!\r\n",""));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(DEBUG_TAG, "Response FAIL!!!: " + url);
-            }
-        });
-
-        // Add a request (in this example, called stringRequest) to your RequestQueue.
-        MyWiFi.getInstance(this).addToRequestQueue(stringRequest);
-    }
-
-    // extract information from result of a WebRequest
-    private void processResponse(String serverIP, String request, String response) {
-        // resend request send if failed
-        if (!request.contains("_") && !response.equals(request)) {
-            startRequest(serverIP, request);
-        } else {
-            MyRoom room = roomList.get(0);
-            int i;
-            for (i = 0; i < roomList.size(); i++) {
-                room = roomList.get(i);
-                if (room.getIp().equals(serverIP)) {
-                    break;
-                }
-            }
-            ListView list = (ListView) findViewById(R.id.roomsListView);
-            View listChild = list.getChildAt(i);
-            char state = response.charAt(0);
-            String value = response.substring(1);
-            switch (state) {
-                case 'P':   // process as Pattern
-                    room.setPattern(value);
-
-                    // get button view from card to change tint
-
-                    SwitchCompat switchCompat = (SwitchCompat) listChild.findViewById(R.id.item_switch);
-                    switchCompat.setEnabled(true);
-                    switch (value) {
-                        case "97":
-                        case "99":
-                            switchCompat.setChecked(false);
-                            break;
-                        default:
-                            switchCompat.setChecked(true);
-                            break;
-                    }
-                    break;
-                case 'C':   // Color
-                    if (value.length() == 10) {
-                        char colorNumber = value.charAt(0);
-                        int red = Integer.parseInt(value.substring(1, 4));
-                        int green = Integer.parseInt(value.substring(4, 7));
-                        int blue = Integer.parseInt(value.substring(7, 10));
-
-                        int color = Color.rgb(red, green, blue);
-
-                        // get color view from card to change tint
-                        ImageView colorView = (ImageView) listChild.findViewById(R.id.item_colorIcon);
-
-                        switch (colorNumber) {
-                            case '1':
-                                room.setColor1(color);
-                                colorView.setColorFilter(color);
-                                break;
-                            case '2':
-                                room.setColor2(color);
-                                break;
-                            default:
-                                Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
-                        }
-                        //Color.rgb(red, green, blue);
-                    } else {
-                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
-                    }
-                    break;
-                case 'T':   // Temperature
-                    float t = Float.parseFloat(value);
-                    TextView textView_temperature = (TextView) listChild.findViewById(R.id.item_txtTemp);
-                    textView_temperature.setText(value + " °C / ");
-                    break;
-                case 'H':   // Humidity
-                    TextView textView_humidity = (TextView) listChild.findViewById(R.id.item_txtHumid);
-                    textView_humidity.setText(value + " % r.h.");
-                    break;
-                default:
-                    Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
-            }
-        }
-    }
-
+//    private class MyListAdapter extends ArrayAdapter<MyRoom> {
+//        public MyListAdapter() {
+//            super(MainActivity.this, R.layout.item_view, roomList);
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, final ViewGroup parent) {
+//            // Make sure we have a view to work with (may have been given null)
+//            View itemView = convertView;
+//            if (itemView == null) {
+//                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
+//            }
+//
+//            // Find the room to work with.
+//            final MyRoom currentRoom = roomList.get(position);
+//
+//            RelativeLayout roomAction = (RelativeLayout) itemView.findViewById(R.id.roomAction);
+//            roomAction.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    //Toast.makeText(MainActivity.this, "OKKKKK", Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainActivity.this, RoomActivity.class);
+//                    intent.putExtra("ROOM_IP", currentRoom.getIp());
+//                    intent.putExtra("ROOM_NAME", currentRoom.getName());
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            // Fill the view
+//            ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
+//            imageView.setImageResource(currentRoom.getIconID());
+//
+//            // Name:
+//            TextView nameText = (TextView) itemView.findViewById(R.id.item_txtName);
+//            nameText.setText(currentRoom.getName());
+//
+//            //Switch Button for ON - OFF
+//            SwitchCompat switchCompat = (SwitchCompat) itemView.findViewById(R.id.item_switch);
+//            switchCompat.setEnabled(false);
+//            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    String pattern = currentRoom.getPattern();
+//                    if (isChecked) {
+//                        if (pattern.equals("99") || pattern.equals("97")) {
+//                            startRequest(currentRoom.getIp(), "P98");
+//                        }
+//                    } else {
+//                        if (!pattern.equals("99") || !pattern.equals("97")) {
+//                            startRequest(currentRoom.getIp(), "P99");
+//                        }
+//                    }
+//                }
+//            });
+//
+//
+//            return itemView;
+//        }
+//    }
+//
+//    private void refreshActivity() {
+//        for (int i = 0; i < roomList.size(); i++) {
+//            String ip = roomList.get(i).getIp();
+//            startRequest(ip, "P_");
+//            startRequest(ip, "C1_");
+//            startRequest(ip, "T_");
+//            startRequest(ip, "H_");
+//        }
+//        swipeRefreshLayout.setRefreshing(false);
+//    }
+//
+//
+//    public void startRequest(final String ip, final String message) {
+//        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//        if (networkInfo == null || !networkInfo.isConnected()) {
+//            Toast.makeText(MainActivity.this, "No network access", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//
+//        final String url = "http://" + ip + "/" + message;
+//        Log.d(DEBUG_TAG, "Request: " + url);
+//        //webRequest.sendGetRequest(url);
+//
+//        // Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
+//                        //Snackbar.make(coordinatorLayout, response, Snackbar.LENGTH_LONG).show();
+//                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
+//                        processResponse(ip, message, response.replace("!\r\n",""));
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d(DEBUG_TAG, "Response FAIL!!!: " + url);
+//            }
+//        });
+//
+//        // Add a request (in this example, called stringRequest) to your RequestQueue.
+//        MyWiFi.getInstance(this).addToRequestQueue(stringRequest);
+//    }
+//
+//    // extract information from result of a WebRequest
+//    private void processResponse(String serverIP, String request, String response) {
+//        // resend request send if failed
+//        if (!request.contains("_") && !response.equals(request)) {
+//            startRequest(serverIP, request);
+//        } else {
+//            MyRoom room = roomList.get(0);
+//            int i;
+//            for (i = 0; i < roomList.size(); i++) {
+//                room = roomList.get(i);
+//                if (room.getIp().equals(serverIP)) {
+//                    break;
+//                }
+//            }
+//            ListView list = (ListView) findViewById(R.id.roomsListView);
+//            View listChild = list.getChildAt(i);
+//            char state = response.charAt(0);
+//            String value = response.substring(1);
+//            switch (state) {
+//                case 'P':   // process as Pattern
+//                    room.setPattern(value);
+//
+//                    // get button view from card to change tint
+//
+//                    SwitchCompat switchCompat = (SwitchCompat) listChild.findViewById(R.id.item_switch);
+//                    switchCompat.setEnabled(true);
+//                    switch (value) {
+//                        case "97":
+//                        case "99":
+//                            switchCompat.setChecked(false);
+//                            break;
+//                        default:
+//                            switchCompat.setChecked(true);
+//                            break;
+//                    }
+//                    break;
+//                case 'C':   // Color
+//                    if (value.length() == 10) {
+//                        char colorNumber = value.charAt(0);
+//                        int red = Integer.parseInt(value.substring(1, 4));
+//                        int green = Integer.parseInt(value.substring(4, 7));
+//                        int blue = Integer.parseInt(value.substring(7, 10));
+//
+//                        int color = Color.rgb(red, green, blue);
+//
+//                        // get color view from card to change tint
+//                        ImageView colorView = (ImageView) listChild.findViewById(R.id.item_colorIcon);
+//
+//                        switch (colorNumber) {
+//                            case '1':
+//                                room.setColor1(color);
+//                                colorView.setColorFilter(color);
+//                                break;
+//                            case '2':
+//                                room.setColor2(color);
+//                                break;
+//                            default:
+//                                Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
+//                        }
+//                        //Color.rgb(red, green, blue);
+//                    } else {
+//                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
+//                    }
+//                    break;
+//                case 'T':   // Temperature
+//                    float t = Float.parseFloat(value);
+//                    TextView textView_temperature = (TextView) listChild.findViewById(R.id.item_txtTemp);
+//                    textView_temperature.setText(value + " °C / ");
+//                    break;
+//                case 'H':   // Humidity
+//                    TextView textView_humidity = (TextView) listChild.findViewById(R.id.item_txtHumid);
+//                    textView_humidity.setText(value + " % r.h.");
+//                    break;
+//                default:
+//                    Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
+//            }
+//        }
+//    }
+//
 
 }
