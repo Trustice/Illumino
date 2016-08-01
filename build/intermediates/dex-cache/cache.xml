@@ -12,7 +12,7 @@
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="7ea1ebef8bbd5b0646b0c4662eba183464dfcefe">
+        sha1="a79d80dd5a82f90cdaa9483a329651a16cc6b6b8">
         <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\instant-run_eaf2f8c4de6fde92fb01a59b0cf3e9f52d3980a4.jar" />
     </item>
     <item
@@ -40,7 +40,7 @@
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.1"
-        sha1="11cfef336a451dc96be1807c3ad913a6f91dd4e2">
+        sha1="d75169b71c08e48acf27cbcfd0b99f944937e1b9">
         <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_f4fda06b8d406fc21eb983ebde132c0c2f7b5c55.jar" />
     </item>
     <item
