@@ -6,126 +6,126 @@
         jumboMode="true"
         revision="24.0.1"
         sha1="94d9cedd04b124aed044ac71c451a292856d854c">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-base-9.0.2_a3ee006d8404883e32a249559340df46f4ad48e8.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="a79d80dd5a82f90cdaa9483a329651a16cc6b6b8">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\instant-run_eaf2f8c4de6fde92fb01a59b0cf3e9f52d3980a4.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\design\24.1.1\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="e195bd694d5389acfba27ff4fdfa64c4c65b2c05">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-design-24.1.1_dd28d98fc645ab3fa671ad42e02f7071011cb76f.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\libs\achartengine-1.0.0.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="b2bb0af9f390c0edd4d7d95f613f38da3abe0144">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\achartengine-1.0.0_185825a61c945732deb7d630a314ee0f4f334f46.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.2\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="4022261eeea0d92eb2997a68d2c1f084a16abad9">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-9.0.2_0abe516ae541faf1942720ccee287a5a594caa7b.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="d75169b71c08e48acf27cbcfd0b99f944937e1b9">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\instant-run-bootstrap_f4fda06b8d406fc21eb983ebde132c0c2f7b5c55.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.0.2_a3ee006d8404883e32a249559340df46f4ad48e8\classes.dex" />
     </item>
     <item
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.volley\volley\1.0.0\jars\classes.jar"
         jumboMode="true"
         revision="24.0.1"
         sha1="2cd4b982617e544728de0782d718a58ce1b06e3f">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.volley-volley-1.0.0_cbf50eadcd29118e73f66f4f07ff58430585b268.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.volley-volley-1.0.0_cbf50eadcd29118e73f66f4f07ff58430585b268\classes.dex" />
     </item>
     <item
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.1.1\jars\libs\internal_impl-24.1.1.jar"
         jumboMode="true"
         revision="24.0.1"
         sha1="f78c2f395cb096f9dc1dc07e729922b8fcd3c4f5">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\internal_impl-24.1.1_33ad9efce2d96145946301ff80cad130313d6e62.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\24.1.1\3af19f153122737b372622fa6c81dd11a1c6b999\support-annotations-24.1.1.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\support-annotations-24.1.1_abd48ae3180db4d01f3427c59e6fb1f32a226f18.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.1.1\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="6d7d803871e3203465f71a163e7af104f807b446">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-24.1.1_41bfa6be01e88d3b2d7f8ad513d40a7bedb0b95d.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.1.1_33ad9efce2d96145946301ff80cad130313d6e62\classes.dex" />
     </item>
     <item
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\24.1.1\jars\classes.jar"
         jumboMode="true"
         revision="24.0.1"
         sha1="787871951412550519b0222aba3c9df4cea49875">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-24.1.1_e531ee31fc23bcadcd657d60da0c54d58f355231.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-24.1.1_e531ee31fc23bcadcd657d60da0c54d58f355231\classes.dex" />
     </item>
     <item
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.1.1\jars\classes.jar"
         jumboMode="true"
         revision="24.0.1"
         sha1="c936c1bd42f0c018c18920c7bec619ef056b24f8">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-24.1.1_f171200ef8453108969781586a934fb8fdf2ff8d.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.1.1\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="f62e763609f65e47dc6c498760a4accf02776788">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-24.1.1_9ea1f7f6c197b98057084bf116ab43a4031d6c0e.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\libs\org.apache.http.legacy.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="017030d11901291abf8f83a812984276b643ea0f">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\org.apache.http.legacy_f36fadcb9d51aba0e95358102c8143412dddda33.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.2\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="9919563cffd8e3732e944d3c437d4b9575a08448">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-common-9.0.2_407c5ef5e093a5a2f1431b5bbe4e7a54fd0e9ba4.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.1.1\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-24.1.1_18c871fbbff3b86f6b40ec841c6bae0d7fbd5395.jar" />
-    </item>
-    <item
-        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.2\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.1"
-        sha1="aec1bc54964a85d851c2c1b1cb7f90f7dbd755ab">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-9.0.2_a92f033f27c3b0212e1fb43a0c7d79a3c3a814ba.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.1.1_f171200ef8453108969781586a934fb8fdf2ff8d\classes.dex" />
     </item>
     <item
         jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.0.2\jars\classes.jar"
         jumboMode="true"
         revision="24.0.1"
         sha1="d900f2a1ff098cac8befe6c023d723e9afb154be">
-        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-appindexing-9.0.2_437a77e9e3d68519358754f48e6030ca47ffb8e6.jar" />
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-9.0.2_437a77e9e3d68519358754f48e6030ca47ffb8e6\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="6a19cee773102ba40cc851864dcf27228172e85f">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_eaf2f8c4de6fde92fb01a59b0cf3e9f52d3980a4\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\design\24.1.1\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="e195bd694d5389acfba27ff4fdfa64c4c65b2c05">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-24.1.1_dd28d98fc645ab3fa671ad42e02f7071011cb76f\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\libs\achartengine-1.0.0.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="b2bb0af9f390c0edd4d7d95f613f38da3abe0144">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\2\achartengine-1.0.0_185825a61c945732deb7d630a314ee0f4f334f46\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.0.2\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="4022261eeea0d92eb2997a68d2c1f084a16abad9">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-9.0.2_0abe516ae541faf1942720ccee287a5a594caa7b\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="224e2862e0cac189f2a2439f482bbc5d1a571e0c">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_f4fda06b8d406fc21eb983ebde132c0c2f7b5c55\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\24.1.1\3af19f153122737b372622fa6c81dd11a1c6b999\support-annotations-24.1.1.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.1.1_abd48ae3180db4d01f3427c59e6fb1f32a226f18\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.1.1\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="6d7d803871e3203465f71a163e7af104f807b446">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.1.1_41bfa6be01e88d3b2d7f8ad513d40a7bedb0b95d\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.1.1\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="f62e763609f65e47dc6c498760a4accf02776788">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.1.1_9ea1f7f6c197b98057084bf116ab43a4031d6c0e\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\libs\org.apache.http.legacy.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="017030d11901291abf8f83a812984276b643ea0f">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\2\org.apache.http.legacy_f36fadcb9d51aba0e95358102c8143412dddda33\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.0.2\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="9919563cffd8e3732e944d3c437d4b9575a08448">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-common-9.0.2_407c5ef5e093a5a2f1431b5bbe4e7a54fd0e9ba4\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.1.1\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.1.1_18c871fbbff3b86f6b40ec841c6bae0d7fbd5395\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.0.2\jars\classes.jar"
+        jumboMode="true"
+        revision="24.0.1"
+        sha1="aec1bc54964a85d851c2c1b1cb7f90f7dbd755ab">
+        <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tasks-9.0.2_a92f033f27c3b0212e1fb43a0c7d79a3c3a814ba\classes.dex" />
     </item>
 
 </items>

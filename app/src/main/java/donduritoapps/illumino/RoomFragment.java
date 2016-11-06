@@ -335,6 +335,9 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ColorActivity.class);
+                intent.putExtra("COLOR_NUMBER", color_number);
+                intent.putExtra("ROOM_IP", room.getIp());
+                intent.putExtra("ROOM_NAME", room.getName());
                 startActivity(intent);
             }
         });
@@ -342,7 +345,6 @@ public class RoomFragment extends Fragment {
 
     private void createSliders() {
         SeekBar slider_interval = (SeekBar) itemView.findViewById(R.id.seekBar_Interval);
-        if (slider_interval == null) return;
         slider_interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             TextView textView_interval = (TextView) itemView.findViewById(R.id.textView_interval);
             @Override
@@ -393,7 +395,6 @@ public class RoomFragment extends Fragment {
                     room.setInterval((int) progress);
                     Log.d(DEBUG_TAG, "progress: " + progress);
                     SeekBar slider_interval = (SeekBar) itemView.findViewById(R.id.seekBar_Interval);
-                    if (slider_interval == null) return;
                     slider_interval.setProgress((int) progress);
                     break;
                 default:

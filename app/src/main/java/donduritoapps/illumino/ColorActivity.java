@@ -1,5 +1,6 @@
 package donduritoapps.illumino;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 
 public class ColorActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino Color";
+    private MyRoom room;
+    int color_nr;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,9 +47,16 @@ public class ColorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color);
 
+        Intent intent = getIntent();
+        color_nr = intent.getIntExtra("COLOR_NUMBER", 0);
+        room = new MyRoom(intent.getStringExtra("ROOM_NAME"), intent.getStringExtra("ROOM_IP"), 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Farbe " + String.valueOf(color_nr));
+        }
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -60,14 +70,14 @@ public class ColorActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
     }
 
@@ -130,18 +140,12 @@ public class ColorActivity extends AppCompatActivity {
             switch (tab_index) {
                 case 1:
                     rootView = inflater.inflate(R.layout.fragment_color_picker, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
-                    textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
                     return rootView;
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_color_slider, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
-                    textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
                     return rootView;
                 case 3:
                     rootView = inflater.inflate(R.layout.fragment_color_presets, container, false);
-                    textView = (TextView) rootView.findViewById(R.id.section_label);
-                    textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
                     return rootView;
                 default:
                     return null;
@@ -170,11 +174,11 @@ public class ColorActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ColorPickerFragment.newInstance("Test", "Test");
+                    return ColorPickerFragment.newInstance(room.getIp(), color_nr);
                 case 1:
-                    return ColorSliderFragment.newInstance("Test", "Test");
+                    return ColorSliderFragment.newInstance(room.getIp(), color_nr);
                 case 2:
-                    return ColorPresetsFragment.newInstance("Test", "Test");
+                    return ColorPresetsFragment.newInstance(room.getIp(), color_nr);
                 default:
                     // getItem is called to instantiate the fragment for the given page.
                     // Return a PlaceholderFragment (defined as a static inner class below).
