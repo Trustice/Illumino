@@ -383,6 +383,10 @@ public class RoomFragment extends Fragment {
 
             char state = response.charAt(0);
             String value = response.substring(1);
+            if (value.charAt(value.length() - 1) != '!') {
+                return;
+            }
+            value = value.substring(0, value.length() - 1);
             switch (state) {
                 case 'P':   // process as Pattern
                     processPattern(value);
@@ -412,8 +416,7 @@ public class RoomFragment extends Fragment {
         SwitchCompat switchCompatAnimation = (SwitchCompat) itemView.findViewById(R.id.switch_animation);
         switchCompatAnimation.setEnabled(true);
         switch (value) {
-            case "97":
-            case "99":
+            case "0":
                 switchCompatOnOff.setChecked(false);
                 switchCompatAnimation.setChecked(false);
                 break;

@@ -165,9 +165,28 @@ public class RoomsFragment extends Fragment {
         for (int i = 0; i < roomList.size(); i++) {
             String ip = roomList.get(i).getIp();
             startRequest(ip, "P_");
-            startRequest(ip, "C1_");
             startRequest(ip, "T_");
             startRequest(ip, "H_");
+
+            String currPatt = roomList.get(i).getPattern();
+            if (currPatt != null) {
+                switch (currPatt) {
+                    case "0":
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                    case "6":
+                    case "7":
+                    case "8":
+                    case "9":
+                        startRequest(ip, "C" + currPatt + "_");
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -223,6 +242,10 @@ public class RoomsFragment extends Fragment {
             View listChild = list.getChildAt(i);
             char state = response.charAt(0);
             String value = response.substring(1);
+            if (value.charAt(value.length() - 1) != '!') {
+                return;
+            }
+            value = value.substring(0, value.length() - 1);
             switch (state) {
                 case 'P':   // process as Pattern
                     room.setPattern(value);
@@ -232,8 +255,7 @@ public class RoomsFragment extends Fragment {
                     SwitchCompat switchCompat = (SwitchCompat) listChild.findViewById(R.id.item_switch);
                     switchCompat.setEnabled(true);
                     switch (value) {
-                        case "97":
-                        case "99":
+                        case "0":
                             switchCompat.setChecked(false);
                             break;
                         default:
@@ -252,25 +274,14 @@ public class RoomsFragment extends Fragment {
 
                         // get color view from card to change tint
                         ImageView colorView = (ImageView) listChild.findViewById(R.id.item_colorIcon);
-
-                        switch (colorNumber) {
-                            case '1':
-                                room.setColor1(color);
-                                colorView.setColorFilter(color);
-                                break;
-                            case '2':
-                                room.setColor2(color);
-                                break;
-                            default:
-//                                Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
-                        }
+                        room.setColor1(color);
+                        colorView.setColorFilter(color);
                         //Color.rgb(red, green, blue);
                     } else {
 //                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
                     }
                     break;
                 case 'T':   // Temperature
-                    float t = Float.parseFloat(value);
                     TextView textView_temperature = (TextView) listChild.findViewById(R.id.item_txtTemp);
                     textView_temperature.setText(value + " °C / ");
                     break;
