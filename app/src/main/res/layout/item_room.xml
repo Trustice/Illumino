@@ -2,40 +2,93 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="4dp"
+        card_view:contentPadding="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Licht An / Aus"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentStart="true"
-            android:paddingLeft="16dp"
-            android:layout_centerVertical="true" />
+            android:orientation="vertical">
 
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_on_off"
-            android:layout_gravity="center_vertical"
-            android:checked="false"
-            android:enabled="false"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_centerVertical="true" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/textView_StripeName"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="Stripe Name"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#1effffff"/>
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/switch_on_off"
+                    android:layout_gravity="center_vertical"
+                    android:checked="false"
+                    android:enabled="false"
+                    android:layout_marginEnd="8dp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#1effffff" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
+                    android:scaleType="center" />
+
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBar_Interval"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="100ms"
+                    android:id="@+id/textView_interval"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -160,23 +213,9 @@
             android:paddingTop="20dp"
             android:id="@+id/textView2" />
 
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar_Interval"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100ms"
-            android:id="@+id/textView_interval"
-            android:layout_below="@+id/textView2"
-            android:layout_alignStart="@+id/seekBar_Interval" />
+
+
     </RelativeLayout>
 
     <View

@@ -173,8 +173,8 @@ public class RoomFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.d(DEBUG_TAG, "Response PASS!!!" + url);
-                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
-                        processResponse(ip, message, response.replace("!\r\n",""));
+                        Log.d(DEBUG_TAG, "Response: " + response.replace("!",""));
+                        processResponse(ip, message, response.replace("!",""));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -383,10 +383,7 @@ public class RoomFragment extends Fragment {
 
             char state = response.charAt(0);
             String value = response.substring(1);
-            if (value.charAt(value.length() - 1) != '!') {
-                return;
-            }
-            value = value.substring(0, value.length() - 1);
+
             switch (state) {
                 case 'P':   // process as Pattern
                     processPattern(value);

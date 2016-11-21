@@ -145,12 +145,12 @@ public class RoomsFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     String pattern = currentRoom.getPattern();
                     if (isChecked) {
-                        if (pattern.equals("99") || pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P98");
+                        if (pattern.equals("0") || pattern.equals("97")) {
+                            startRequest(currentRoom.getIp(), "P1");
                         }
                     } else {
-                        if (!pattern.equals("99") || !pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P99");
+                        if (!pattern.equals("0") || !pattern.equals("97")) {
+                            startRequest(currentRoom.getIp(), "P0");
                         }
                     }
                 }
@@ -210,8 +210,8 @@ public class RoomsFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.d(DEBUG_TAG, "Response PASS!!!" + url);
                         //Snackbar.make(coordinatorLayout, response, Snackbar.LENGTH_LONG).show();
-                        Log.d(DEBUG_TAG, "Response: " + response.replace("\r\n",""));
-                        processResponse(ip, message, response.replace("!\r\n",""));
+                        Log.d(DEBUG_TAG, "Response: " + response.replace("!",""));
+                        processResponse(ip, message, response.replace("!",""));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -242,10 +242,7 @@ public class RoomsFragment extends Fragment {
             View listChild = list.getChildAt(i);
             char state = response.charAt(0);
             String value = response.substring(1);
-            if (value.charAt(value.length() - 1) != '!') {
-                return;
-            }
-            value = value.substring(0, value.length() - 1);
+            Log.d(DEBUG_TAG, "Response value: " + value);
             switch (state) {
                 case 'P':   // process as Pattern
                     room.setPattern(value);
