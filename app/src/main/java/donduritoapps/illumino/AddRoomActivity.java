@@ -3,10 +3,13 @@ package donduritoapps.illumino;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +18,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 public class AddRoomActivity extends AppCompatActivity {
+    private static final String DEBUG_TAG = "*** RoomFragment";
 
     private Integer[] avatarIds = {
             R.drawable.ic_build_white_24dp,
@@ -40,6 +50,15 @@ public class AddRoomActivity extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        ImageButton button_getInfo = (ImageButton) findViewById(R.id.button_get_info);
+        button_getInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText roomIP = (EditText) findViewById(R.id.editText_newRoomIP);
+                startRequest(roomIP.getText().toString(),"");
+            }
+        });
 
         final GridView gridView = (GridView) findViewById(R.id.grid_room_icons);
         gridView.setAdapter(new GridAdapter(this));
@@ -137,6 +156,71 @@ public class AddRoomActivity extends AppCompatActivity {
 
             return imageView;
         }
+    }
 
+    public void startRequest(final String ip, final String message) {
+        ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null || !networkInfo.isConnected()) {
+            Toast.makeText(this, "No network access", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        final String url = "http://" + ip + "/" + message;
+        Log.d(DEBUG_TAG, "Request: " + url);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
+                        Log.d(DEBUG_TAG, "Response: " + response);
+                        processResponse(ip, message, response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(DEBUG_TAG, "Response FAIL!!!: " + url);
+            }
+        });
+
+        // Add a request (in this example, called stringRequest) to your RequestQueue.
+        MyWiFi.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    private void processResponse(String serverIP, String request, String response) {
+        if (serverIP.equals("192.168.178.80")) {
+            response = "VER:0.1\nNAME:Küche\nSTRIPES:Decke,Arbeitsfläche\nDHT:Y\nPIR:Y";
+            Log.d(DEBUG_TAG, serverIP);
+        }
+        String version = response.split("\n")[0];
+        Log.d(DEBUG_TAG, "Response: " + version);
+
+        String room_name = response.split("\n")[1].split(":")[1];
+        EditText editText_room_name = (EditText) findViewById(R.id.editText_newRoomName);
+        editText_room_name.setText(room_name);
+
+        String room_stripes = response.split("\n")[2].split(":")[1];
+        EditText editText_room_stripes = (EditText) findViewById(R.id.editText_newRoomStripes);
+        editText_room_stripes.setText(room_stripes);
+
+        String room_dht_available = response.split("\n")[3].split(":")[1];
+        ImageView imageView_dht_state = (ImageView) findViewById(R.id.imageView_dhtState);
+        if (room_dht_available == "Y") {
+            imageView_dht_state.setImageResource(R.drawable.ic_check_white_18dp);
+        }
+        else {
+            imageView_dht_state.setImageResource(R.drawable.ic_close_white_18dp);
+        }
+
+        String room_pir_available = response.split("\n")[4].split(":")[1];
+        ImageView imageView_pir_state = (ImageView) findViewById(R.id.imageView_pirState);
+        if (room_dht_available == "Y") {
+            imageView_pir_state.setImageResource(R.drawable.ic_check_white_18dp);
+        }
+        else {
+            imageView_pir_state.setImageResource(R.drawable.ic_close_white_18dp);
+        }
     }
 }
