@@ -107,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < roomList.size(); i++) {
                         String room_name = roomList.get(i).getName();
                         if (item.toString().equals(room_name)) {
-                            RoomFragment roomFragment = new RoomFragment().newInstance(
-                                    roomList.get(i).getName(),
-                                    roomList.get(i).getIp());
+                            RoomFragment roomFragment = new RoomFragment().newInstance(i);
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.fragment_container, roomFragment)
                                     .commit();
@@ -142,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(DEBUG_TAG, "onResume");
     }
 
     @Override
@@ -187,13 +186,16 @@ public class MainActivity extends AppCompatActivity {
     private void populateRoomList() {
         roomList.clear();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        Log.d(DEBUG_TAG, String.valueOf(sharedPref.getInt("ROOM_COUNT", 0)));
+//        Log.d(DEBUG_TAG, String.valueOf(sharedPref.getInt("ROOM_COUNT", 0)));
         for (int i = 0; i < sharedPref.getInt("ROOM_COUNT", 0); i++) {
             String roomNumber = String.valueOf(i);
             String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
             String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
             int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
-            roomList.add(new MyRoom(roomName, roomIP, roomIcon));
+            String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
+            boolean roomDht = sharedPref.getBoolean("ROOM_DHT_", false);
+            boolean roomPir = sharedPref.getBoolean("ROOM_PIR_", false);
+            roomList.add(new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir));
         }
     }
 

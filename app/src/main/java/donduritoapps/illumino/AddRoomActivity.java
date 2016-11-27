@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -115,6 +116,18 @@ public class AddRoomActivity extends AppCompatActivity {
 
             returnIntent.putExtra("ROOM_ICON", avatarIds[avatarSelectionIndex]);
             setResult(AddRoomActivity.RESULT_OK, returnIntent);
+
+            EditText roomStripes = (EditText) findViewById(R.id.editText_newRoomStripes);
+            returnIntent.putExtra("ROOM_STRIPE_NAMES", roomStripes.getText().toString());
+
+            ImageView imageView_dht_state = (ImageView) findViewById(R.id.imageView_dhtState);
+            if (imageView_dht_state.isEnabled()) { returnIntent.putExtra("ROOM_DHT", true); }
+            else { returnIntent.putExtra("ROOM_DHT", false); }
+
+            ImageView imageView_pir_state = (ImageView) findViewById(R.id.imageView_pirState);
+            if (imageView_dht_state.isEnabled()) { returnIntent.putExtra("ROOM_PIR", true); }
+            else { returnIntent.putExtra("ROOM_PIR", false); }
+
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -195,7 +208,6 @@ public class AddRoomActivity extends AppCompatActivity {
             Log.d(DEBUG_TAG, serverIP);
         }
         String version = response.split("\n")[0];
-        Log.d(DEBUG_TAG, "Response: " + version);
 
         String room_name = response.split("\n")[1].split(":")[1];
         EditText editText_room_name = (EditText) findViewById(R.id.editText_newRoomName);
@@ -206,21 +218,21 @@ public class AddRoomActivity extends AppCompatActivity {
         editText_room_stripes.setText(room_stripes);
 
         String room_dht_available = response.split("\n")[3].split(":")[1];
-        ImageView imageView_dht_state = (ImageView) findViewById(R.id.imageView_dhtState);
-        if (room_dht_available == "Y") {
-            imageView_dht_state.setImageResource(R.drawable.ic_check_white_18dp);
+        TextView textView_dht_state = (TextView) findViewById(R.id.textView_dht_state);
+        if (room_dht_available.equals("Y")) {
+            textView_dht_state.setEnabled(true);
         }
         else {
-            imageView_dht_state.setImageResource(R.drawable.ic_close_white_18dp);
+            textView_dht_state.setEnabled(false);
         }
 
         String room_pir_available = response.split("\n")[4].split(":")[1];
-        ImageView imageView_pir_state = (ImageView) findViewById(R.id.imageView_pirState);
-        if (room_dht_available == "Y") {
-            imageView_pir_state.setImageResource(R.drawable.ic_check_white_18dp);
+        TextView textView_pir_state = (TextView) findViewById(R.id.textView_pir_state);
+        if (room_pir_available.equals("Y")) {
+            textView_pir_state.setEnabled(true);
         }
         else {
-            imageView_pir_state.setImageResource(R.drawable.ic_close_white_18dp);
+            textView_pir_state.setEnabled(false);
         }
     }
 }

@@ -3,10 +3,12 @@ package donduritoapps.illumino;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -47,8 +49,11 @@ import java.util.List;
  */
 public class RoomFragment extends Fragment {
     private static final String DEBUG_TAG = "*** RoomFragment";
-    private static final String ARG_ROOM_NAME = "Room";
-    private static final String ARG_ROOM_IP = "255.255.255.255";
+    private static final String ARG_ROOM_INDEX = "0";
+
+
+//    private static final String ARG_ROOM_NAME = "Room";
+//    private static final String ARG_ROOM_IP = "255.255.255.255";
 
     private View fragment_view;
     private View itemView;
@@ -65,16 +70,15 @@ public class RoomFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param room_name Parameter 1.
-     * @param room_ip Parameter 2.
+     * @param roomIndex Parameter 1.
+     *
      * @return A new instance of fragment RoomFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RoomFragment newInstance(String room_name, String room_ip) {
+    public static RoomFragment newInstance(Integer roomIndex) {
         RoomFragment fragment = new RoomFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_ROOM_NAME, room_name);
-        args.putString(ARG_ROOM_IP, room_ip);
+        args.putInt(ARG_ROOM_INDEX, roomIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,9 +86,16 @@ public class RoomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        room = new MyRoom(getArguments().getString(ARG_ROOM_NAME),
-                getArguments().getString(ARG_ROOM_IP),
-                R.drawable.ic_build_white_24dp);
+        String roomNumber = String.valueOf(getArguments().getInt(ARG_ROOM_INDEX));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
+        String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
+        int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
+        String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
+        boolean roomDht = sharedPref.getBoolean("ROOM_DHT_" + roomNumber, false);
+        boolean roomPir = sharedPref.getBoolean("ROOM_PIR_" + roomNumber, false);
+        room = new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir);
+
         roomList.add(room);
     }
 
@@ -335,8 +346,8 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ColorActivity.class);
-                intent.putExtra("COLOR_NUMBER", color_number);
                 intent.putExtra("ROOM_IP", room.getIp());
+                intent.putExtra("COLOR_NUMBER", color_number);
                 intent.putExtra("ROOM_NAME", room.getName());
                 startActivity(intent);
             }

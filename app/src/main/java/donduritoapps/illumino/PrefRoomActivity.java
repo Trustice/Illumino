@@ -59,31 +59,6 @@ public class PrefRoomActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //roomList.add(new MyRoom("Test", "192.168.178.34", R.drawable.avatar_test_40dp));
-                //adapter.notifyDataSetChanged();
-//                final AppCompatDialog dialog = new AppCompatDialog(PrefRoomActivity.this);
-//                dialog.setContentView(R.layout.dialog_add_room);
-//                dialog.setTitle("Add Room");
-//
-//
-//                Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
-//                buttonOK.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        EditText edit = (EditText) dialog.findViewById(R.id.editText_name);
-//                        String text = edit.getText().toString();
-//                        dialog.dismiss();
-//                        Toast.makeText(PrefRoomActivity.this, text, Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//
-//                Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
-//                buttonCancel.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                dialog.show();
                 Intent intent = new Intent(PrefRoomActivity.this, AddRoomActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -127,13 +102,16 @@ public class PrefRoomActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
             editor.putInt("ROOM_COUNT", roomList.size());
-            Log.d(DEBUG_TAG, String.valueOf(roomList.size()));
+            Log.d(DEBUG_TAG, "Stripes Num:" + roomList.size());
             for (int i = 0; i < roomList.size(); i++) {
                 String roomNumber = String.valueOf(i);
                 MyRoom room = roomList.get(i);
                 editor.putString("ROOM_NAME_" + roomNumber, room.getName());
                 editor.putString("ROOM_IP_" + roomNumber, room.getIp());
                 editor.putInt("ROOM_ICON_" + roomNumber, room.getIconID());
+                editor.putString("ROOM_STRIPE_NAMES_" + roomNumber, room.getStripeNames());
+                editor.putBoolean("ROOM_DHT_STATE_" + roomNumber, room.getDhtState());
+                editor.putBoolean("ROOM_PIR_STATE_" + roomNumber, room.getPirState());
             }
             editor.commit();
             finish();
@@ -151,9 +129,12 @@ public class PrefRoomActivity extends AppCompatActivity {
                     String newRoomName = data.getStringExtra("ROOM_NAME");
                     String newRoomIP = data.getStringExtra("ROOM_IP");
                     int newRoomIcon = data.getIntExtra("ROOM_ICON", R.drawable.ic_build_white_24dp);
+                    String newRoomStripeNames = data.getStringExtra("ROOM_STRIPE_NAMES");
+                    boolean newRoomDHT = data.getBooleanExtra("ROOM_DHT", false);
+                    boolean newRoomPIR = data.getBooleanExtra("ROOM_PIR", false);
 //                    Toast.makeText(PrefRoomActivity.this, newRoomName, Toast.LENGTH_LONG).show();
 //                    Toast.makeText(PrefRoomActivity.this, newRoomIP, Toast.LENGTH_LONG).show();
-                    roomList.add(new MyRoom(newRoomName, newRoomIP, newRoomIcon));
+                    roomList.add(new MyRoom(newRoomName, newRoomIP, newRoomIcon, newRoomStripeNames, newRoomDHT, newRoomPIR));
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -170,7 +151,10 @@ public class PrefRoomActivity extends AppCompatActivity {
             String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
             String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
             int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
-            roomList.add(new MyRoom(roomName, roomIP, roomIcon));
+            String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
+            boolean roomDht = sharedPref.getBoolean("ROOM_DHT_STATE_" + roomNumber, false);
+            boolean roomPir = sharedPref.getBoolean("ROOM_PIR_STATE_" + roomNumber, false);
+            roomList.add(new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir));
         }
         adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.listViewRoomSettings);
@@ -208,12 +192,25 @@ public class PrefRoomActivity extends AppCompatActivity {
             TextView ipText = (TextView) itemView.findViewById(R.id.item_textIP);
             ipText.setText(currentRoom.getIp());
 
+            // Stripe Names
+            TextView stripeNamesText = (TextView) itemView.findViewById(R.id.item_textStripes);
+            stripeNamesText.setText(currentRoom.getStripeNames());
+
+            // DHT:
+            TextView dhtText = (TextView) itemView.findViewById(R.id.item_textDHT);
+            if (currentRoom.getDhtState()) { dhtText.setEnabled(true); }
+            else { dhtText.setEnabled(false); }
+
+            // PIR:
+            TextView pirText = (TextView) itemView.findViewById(R.id.item_textPIR);
+            if (currentRoom.getDhtState()) { pirText.setEnabled(true); }
+            else { pirText.setEnabled(false); }
+
             // Button Up:
             ImageButton btnUpAction = (ImageButton) itemView.findViewById(R.id.btn_list_up);
             btnUpAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Toast.makeText(PrefRoomActivity.this, "OKKKKK", Toast.LENGTH_LONG).show();
                     swapListItems(position, -1);
                 }
             });

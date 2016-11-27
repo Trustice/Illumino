@@ -5,12 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -20,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,6 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+import static java.lang.Math.incrementExact;
+import static java.lang.Math.subtractExact;
+import static java.lang.Math.toIntExact;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RoomsFragment#newInstance} factory method to
@@ -45,6 +56,8 @@ public class RoomsFragment extends Fragment {
     private List<MyRoom> roomList = new ArrayList<MyRoom>();
     View fragment_view;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private List<Boolean> send_enable = new ArrayList<>();
+    private List<Boolean> pir_enable = new ArrayList<>();
 
     public RoomsFragment() {
         // Required empty public constructor
@@ -81,16 +94,30 @@ public class RoomsFragment extends Fragment {
         return fragment_view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateRoomList();
+        populateListView();
+        refreshActivity();
+    }
+
+
     private void populateRoomList() {
         roomList.clear();
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        Log.d(DEBUG_TAG, String.valueOf(sharedPref.getInt("ROOM_COUNT", 0)));
+//        Log.d(DEBUG_TAG, String.valueOf(sharedPref.getInt("ROOM_COUNT", 0)));
         for (int i = 0; i < sharedPref.getInt("ROOM_COUNT", 0); i++) {
             String roomNumber = String.valueOf(i);
             String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
             String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
             int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
-            roomList.add(new MyRoom(roomName, roomIP, roomIcon));
+            String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
+            boolean roomDht = sharedPref.getBoolean("ROOM_DHT_STATE_" + roomNumber, false);
+            boolean roomPir = sharedPref.getBoolean("ROOM_PIR_STATE_" + roomNumber, false);
+            roomList.add(new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir));
+            send_enable.add(i, true);
+            pir_enable.add(i, false);
         }
     }
 
@@ -107,7 +134,7 @@ public class RoomsFragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
             View itemView = convertView;
             if (itemView == null) {
@@ -121,16 +148,14 @@ public class RoomsFragment extends Fragment {
             roomAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Toast.makeText(MainActivity.this, "OKKKKK", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getActivity(), RoomActivity.class);
-                    intent.putExtra("ROOM_IP", currentRoom.getIp());
-                    intent.putExtra("ROOM_NAME", currentRoom.getName());
+                    intent.putExtra("ROOM_INDEX", position);
                     startActivity(intent);
                 }
             });
 
             // Fill the view
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
+            final ImageView imageView = (ImageView) itemView.findViewById(R.id.item_icon);
             imageView.setImageResource(currentRoom.getIconID());
 
             // Name:
@@ -143,19 +168,39 @@ public class RoomsFragment extends Fragment {
             switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    String pattern = currentRoom.getPattern();
-                    if (isChecked) {
-                        if (pattern.equals("0") || pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P1");
+                    if (send_enable.get(position)) {
+                        if (isChecked) {
+                            for (int i = 0; i < currentRoom.getStripes_num(); i++) {
+                                Log.d(DEBUG_TAG, "Pattern:" + currentRoom.getPattern(i));
+                                if ((currentRoom.getPattern(i) == 0) || pir_enable.get(position))
+                                    startRequest(currentRoom.getIp(), "P" + (i*100 + 1));
+                            }
+                        } else {
+                            for (int i = 0; i < currentRoom.getStripes_num(); i++) {
+                                Log.d(DEBUG_TAG, "Pattern:" + currentRoom.getPattern(i));
+                                if (!(currentRoom.getPattern(i) == 0))
+                                    startRequest(currentRoom.getIp(), "P" + (i * 100));
+                            }
                         }
-                    } else {
-                        if (!pattern.equals("0") || !pattern.equals("97")) {
-                            startRequest(currentRoom.getIp(), "P0");
-                        }
+                        refreshActivity();
                     }
+                    send_enable.set(position, true);
+
                 }
             });
 
+            // Stripe Icons
+            LinearLayout stripeIcons_ll = (LinearLayout) itemView.findViewById(R.id.item_linearLayout_stripes_icons);
+            stripeIcons_ll.removeAllViews();
+            for (int i = 0; i < currentRoom.getStripes_num(); i++) {
+                ImageView icon = new ImageView(getContext());
+                icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
+                icon.setColorFilter(Color.GRAY);
+
+                if (icon.getParent()!=null)
+                    ((ViewGroup)icon.getParent()).removeView(icon);
+                stripeIcons_ll.addView(icon);
+            }
 
             return itemView;
         }
@@ -163,29 +208,17 @@ public class RoomsFragment extends Fragment {
 
     private void refreshActivity() {
         for (int i = 0; i < roomList.size(); i++) {
-            String ip = roomList.get(i).getIp();
-            startRequest(ip, "P_");
-            startRequest(ip, "T_");
-            startRequest(ip, "H_");
+            MyRoom room = roomList.get(i);
+            String ip = room.getIp();
 
-            String currPatt = roomList.get(i).getPattern();
-            if (currPatt != null) {
-                switch (currPatt) {
-                    case "0":
-                    case "1":
-                    case "2":
-                    case "3":
-                    case "4":
-                    case "5":
-                    case "6":
-                    case "7":
-                    case "8":
-                    case "9":
-                        startRequest(ip, "C" + currPatt + "_");
-                        break;
-                    default:
-                        break;
-                }
+            if (room.getPirState()) {
+                startRequest(ip, "M_");
+            } else
+                startRequest(ip, "P" + room.getStripes_num() + "_");
+
+            if (room.getDhtState()) {
+                startRequest(ip, "T_");
+                startRequest(ip, "H_");
             }
         }
         swipeRefreshLayout.setRefreshing(false);
@@ -208,9 +241,7 @@ public class RoomsFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(DEBUG_TAG, "Response PASS!!!" + url);
-                        //Snackbar.make(coordinatorLayout, response, Snackbar.LENGTH_LONG).show();
-                        Log.d(DEBUG_TAG, "Response: " + response.replace("!",""));
+                        Log.d(DEBUG_TAG, "Response PASS!!!" + url + ": " + response.replace("!",""));
                         processResponse(ip, message, response.replace("!",""));
                     }
                 }, new Response.ErrorListener() {
@@ -227,70 +258,142 @@ public class RoomsFragment extends Fragment {
     // extract information from result of a WebRequest
     private void processResponse(String serverIP, String request, String response) {
         // resend request send if failed
-        if (!request.contains("_") && !response.equals(request)) {
+        if ( !request.contains("_") && !response.equals(request) ) {
             startRequest(serverIP, request);
         } else {
             MyRoom room = roomList.get(0);
             int i;
             for (i = 0; i < roomList.size(); i++) {
                 room = roomList.get(i);
-                if (room.getIp().equals(serverIP)) {
+                if (room.getIp().equals(serverIP))
                     break;
-                }
             }
             ListView list = (ListView) fragment_view.findViewById(R.id.roomsListView);
             View listChild = list.getChildAt(i);
             char state = response.charAt(0);
             String value = response.substring(1);
-            Log.d(DEBUG_TAG, "Response value: " + value);
             switch (state) {
                 case 'P':   // process as Pattern
-                    room.setPattern(value);
-
-                    // get button view from card to change tint
-
-                    SwitchCompat switchCompat = (SwitchCompat) listChild.findViewById(R.id.item_switch);
-                    switchCompat.setEnabled(true);
-                    switch (value) {
-                        case "0":
-                            switchCompat.setChecked(false);
-                            break;
-                        default:
-                            switchCompat.setChecked(true);
-                            break;
-                    }
+                    processPattern(listChild, i, value);
                     break;
                 case 'C':   // Color
-                    if (value.length() == 10) {
-                        char colorNumber = value.charAt(0);
-                        int red = Integer.parseInt(value.substring(1, 4));
-                        int green = Integer.parseInt(value.substring(4, 7));
-                        int blue = Integer.parseInt(value.substring(7, 10));
-
-                        int color = Color.rgb(red, green, blue);
-
-                        // get color view from card to change tint
-                        ImageView colorView = (ImageView) listChild.findViewById(R.id.item_colorIcon);
-                        room.setColor1(color);
-                        colorView.setColorFilter(color);
-                        //Color.rgb(red, green, blue);
-                    } else {
-//                        Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
-                    }
+                    processColor(listChild, room, value);
                     break;
                 case 'T':   // Temperature
                     TextView textView_temperature = (TextView) listChild.findViewById(R.id.item_txtTemp);
-                    textView_temperature.setText(value + " °C / ");
+                    textView_temperature.setVisibility(View.VISIBLE);
+                    textView_temperature.setText(value + "°C / ");
                     break;
                 case 'H':   // Humidity
                     TextView textView_humidity = (TextView) listChild.findViewById(R.id.item_txtHumid);
+                    textView_humidity.setVisibility(View.VISIBLE);
                     textView_humidity.setText(value + " % r.h.");
                     break;
+                case 'M':    // PIR
+                    ImageView imageView_pir = (ImageView) listChild.findViewById(R.id.item_imageIconPir);
+                    switch (value) {
+                        case "0":
+                            pir_enable.set(i, false);
+                            imageView_pir.setVisibility(View.INVISIBLE);
+                            break;
+                        case "10":
+                            pir_enable.set(i, false);
+                            imageView_pir.setVisibility(View.VISIBLE);
+                            imageView_pir.setColorFilter(Color.GRAY);
+                            break;
+                        case "11":
+                            pir_enable.set(i, true);
+                            imageView_pir.setVisibility(View.VISIBLE);
+                            imageView_pir.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                            break;
+                        default:
+                            return;
+
+                    }
+
+                    startRequest(room.getIp(), "P" + room.getStripes_num() + "_");
+                    break;
+
                 default:
 //                    Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
             }
         }
     }
 
+    void processPattern(View listChild, int roomIndex, String value){
+        MyRoom room = roomList.get(roomIndex);
+        int value_int = Integer.parseInt(value);
+        int stripe_number = value_int / 100;
+        int color_number = value_int % 100;
+        room.setPattern(value);
 
+        SwitchCompat switchCompat = (SwitchCompat) listChild.findViewById(R.id.item_switch);
+        switchCompat.setEnabled(true);
+
+        // get general room state
+        if (stripe_number == room.getStripes_num()) {
+            if  (pir_enable.get(roomIndex) || (value_int % 100 == 0)) {
+                if ( switchCompat.isChecked() ) {
+                    send_enable.set(roomIndex, false);
+                    switchCompat.setChecked(false);
+                }
+            }
+            else if (value_int % 100 == 1) {
+                if ( !switchCompat.isChecked() ) {
+                    send_enable.set(roomIndex, false);
+                    switchCompat.setChecked(true);
+                }
+            } else {
+                return;
+            }
+
+            for (int j = 0; j < room.getStripes_num(); j++) {
+                startRequest(room.getIp(), "P" + j + "_");
+            }
+        }
+        else if (value.length() > 4)
+            return;
+        else {
+            LinearLayout stripe_icons_ll = (LinearLayout) listChild.findViewById(R.id.item_linearLayout_stripes_icons);
+            ImageView stripe_icon = (ImageView) stripe_icons_ll.getChildAt(stripe_number);
+
+            if ( (color_number >= 0) && (color_number <= 9) ) {
+                stripe_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
+                startRequest(room.getIp(), "C" + stripe_number + color_number + "_");
+            }
+            else if ( (color_number >= 30) && (color_number <= 33) ) {
+                stripe_icon.setImageResource(R.drawable.ic_fire_white_24dp);
+                stripe_icon.setColorFilter(Color.RED);
+            }
+            room.setPattern(stripe_number, color_number);
+        }
+    }
+
+    void processColor(View listChild, MyRoom room, String value) {
+        if ( (value.length() == 10) || (value.length() == 11)) {
+            int stripeNumber = 0;
+            int offset = 0;
+            if (value.length() == 11) {
+                stripeNumber = value.charAt(0) - '0';
+                offset = 1;
+            }
+            int colorNumber = value.charAt(0 + offset) - '0';
+            int red = Integer.parseInt(value.substring(1 + offset, 4 + offset));
+            int green = Integer.parseInt(value.substring(4 + offset, 7 + offset));
+            int blue = Integer.parseInt(value.substring(7 + offset, 10 + offset));
+
+            int color = Color.rgb(red, green, blue);
+
+            // get color view from card to change tint
+            LinearLayout stripe_icons_ll = (LinearLayout) listChild.findViewById(R.id.item_linearLayout_stripes_icons);
+            ImageView lightbulb = (ImageView) stripe_icons_ll.getChildAt(stripeNumber);
+            lightbulb.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
+            if (colorNumber == 0)
+                lightbulb.setColorFilter(Color.DKGRAY);
+            else
+                lightbulb.setColorFilter(color);
+        } else {
+            Toast.makeText(getActivity(), "C_ERR_value: " + value.length(), Toast.LENGTH_LONG).show();
+        }
+    }
 }

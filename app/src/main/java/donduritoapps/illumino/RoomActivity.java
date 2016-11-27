@@ -2,6 +2,7 @@ package donduritoapps.illumino;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntegerRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -76,8 +78,7 @@ public class RoomActivity extends AppCompatActivity {
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         RoomFragment roomFragment = new RoomFragment().newInstance(
-                intent.getStringExtra("ROOM_NAME"),
-                intent.getStringExtra("ROOM_IP"));
+                intent.getIntExtra("ROOM_INDEX",0));
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, roomFragment).commit();
@@ -86,7 +87,8 @@ public class RoomActivity extends AppCompatActivity {
         if(toolbar != null) {
             setSupportActionBar(toolbar);
             if(getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(intent.getStringExtra("ROOM_NAME"));
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                getSupportActionBar().setTitle(sharedPref.getString("ROOM_NAME_" + intent.getIntExtra("ROOM_INDEX",0), "Error"));
                 getSupportActionBar().setHomeButtonEnabled(true);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
@@ -96,7 +98,7 @@ public class RoomActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.d(DEBUG_TAG, "onResume");
         //populateListView();
         //registerClickCallback();
 

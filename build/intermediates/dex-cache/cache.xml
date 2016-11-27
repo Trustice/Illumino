@@ -16,7 +16,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.1"
-        sha1="a39bc1c4a662b080588f128e376c54d13ee8a888">
+        sha1="57265ef1d5c39c009cf1bb75296fe4410d794f79">
         <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_eaf2f8c4de6fde92fb01a59b0cf3e9f52d3980a4\classes.dex" />
     </item>
     <item
@@ -133,7 +133,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.1"
-        sha1="c6399b084df48c970659dce34a38a7a7360a6c1b">
+        sha1="9b6406aa94e8434d0ed3e2e78391a09cabb852b6">
         <dex dex="C:\Users\User\Documents\GitHub\Illumino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_f4fda06b8d406fc21eb983ebde132c0c2f7b5c55\classes.dex" />
     </item>
     <item

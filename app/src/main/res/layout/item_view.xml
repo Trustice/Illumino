@@ -36,14 +36,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/item_colorIcon"
-                    android:src="@drawable/ic_circle_white_18dp"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/relativeLayout"
-                    android:layout_marginStart="24dp" />
+
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -64,10 +57,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:text="nan °C / "
                         android:id="@+id/item_txtTemp"
-                        android:layout_below="@+id/item_txtName"
-                        android:layout_alignStart="@+id/item_txtName"
+                        android:layout_toEndOf="@+id/item_txtName"
+                        android:layout_alignBottom="@id/item_txtName"
+                        android:visibility="invisible"
                         style="@style/Base.TextAppearance.AppCompat.Caption" />
 
                     <TextView
@@ -77,8 +72,32 @@
                         android:text="nan % r.h."
                         android:id="@+id/item_txtHumid"
                         android:layout_alignBottom="@+id/item_txtTemp"
+                        android:visibility="invisible"
                         android:layout_toEndOf="@+id/item_txtTemp" />
+
+                    <LinearLayout
+                        android:id="@+id/item_linearLayout_stripes_icons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_below="@id/item_txtName"
+                        android:orientation="horizontal"
+                        android:layout_alignStart="@id/item_txtName">
+
+
+                    </LinearLayout>
+
                 </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/item_imageIconPir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_directions_walk_white_18dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="visible"/>
             </RelativeLayout>
 
             <android.support.v7.widget.SwitchCompat

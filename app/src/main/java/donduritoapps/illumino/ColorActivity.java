@@ -24,8 +24,9 @@ import android.widget.TextView;
 
 public class ColorActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino Color";
-    private MyRoom room;
+    private String room_name;
     int color_nr;
+    private String room_ip;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -49,7 +50,9 @@ public class ColorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         color_nr = intent.getIntExtra("COLOR_NUMBER", 0);
-        room = new MyRoom(intent.getStringExtra("ROOM_NAME"), intent.getStringExtra("ROOM_IP"), 0);
+        room_ip = intent.getStringExtra("ROOM_IP") ;
+        room_name = intent.getStringExtra("ROOM_NAME");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -174,11 +177,11 @@ public class ColorActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return ColorPickerFragment.newInstance(room.getIp(), color_nr);
+                    return ColorPickerFragment.newInstance(room_ip, color_nr);
                 case 1:
-                    return ColorSliderFragment.newInstance(room.getIp(), color_nr);
+                    return ColorSliderFragment.newInstance(room_ip, color_nr);
                 case 2:
-                    return ColorPresetsFragment.newInstance(room.getIp(), color_nr);
+                    return ColorPresetsFragment.newInstance(room_ip, color_nr);
                 default:
                     // getItem is called to instantiate the fragment for the given page.
                     // Return a PlaceholderFragment (defined as a static inner class below).
