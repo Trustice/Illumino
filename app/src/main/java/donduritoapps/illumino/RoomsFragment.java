@@ -5,18 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
-import android.support.annotation.IntegerRes;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -39,11 +33,9 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import static java.lang.Math.incrementExact;
 import static java.lang.Math.subtractExact;
-import static java.lang.Math.toIntExact;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +69,8 @@ public class RoomsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragment_view = inflater.inflate(R.layout.fragment_rooms, container, false);
+
+        ((MainActivity) getActivity()).setActionBarTitle("Illuminoo");
 
         populateRoomList();
         populateListView();
@@ -148,9 +142,15 @@ public class RoomsFragment extends Fragment {
             roomAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), RoomActivity.class);
-                    intent.putExtra("ROOM_INDEX", position);
-                    startActivity(intent);
+//                    Intent intent = new Intent(getActivity(), RoomActivity.class);
+//                    intent.putExtra("ROOM_INDEX", position);
+//                    startActivity(intent);
+
+                    RoomFragment roomFragment = new RoomFragment().newInstance(position);
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, roomFragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
 
@@ -360,6 +360,11 @@ public class RoomsFragment extends Fragment {
             if ( (color_number >= 0) && (color_number <= 9) ) {
                 stripe_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
                 startRequest(room.getIp(), "C" + stripe_number + color_number + "_");
+            }
+            else if ( (color_number >= 20) && (color_number <= 29) ) {
+                stripe_icon.clearColorFilter();
+                stripe_icon.setImageResource(R.drawable.ic_lightbulb_outline_rainbow_24dp);
+
             }
             else if ( (color_number >= 30) && (color_number <= 33) ) {
                 stripe_icon.setImageResource(R.drawable.ic_fire_white_24dp);

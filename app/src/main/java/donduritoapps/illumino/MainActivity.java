@@ -15,6 +15,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -97,19 +98,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 Log.d(DEBUG_TAG, item.toString());
+                FragmentManager fm = getSupportFragmentManager();
+
+                Log.d(DEBUG_TAG, "### Backstack: " + fm.getBackStackEntryCount());
 
                 if (item.toString().equals("Übersicht")) {
                     RoomsFragment roomsFragment = new RoomsFragment().newInstance();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, roomsFragment).commit();
+
+                    if (fm.getBackStackEntryCount() > 0)
+                        fm.popBackStackImmediate();
+
+                    fm.beginTransaction()
+                            .add(R.id.fragment_container, roomsFragment)
+                            .commit();
                 }
                 else {
                     for (int i = 0; i < roomList.size(); i++) {
                         String room_name = roomList.get(i).getName();
                         if (item.toString().equals(room_name)) {
                             RoomFragment roomFragment = new RoomFragment().newInstance(i);
-                            getSupportFragmentManager().beginTransaction()
+                            fm.beginTransaction()
                                     .replace(R.id.fragment_container, roomFragment)
+                                    .addToBackStack(null)
                                     .commit();
                         }
                     }
@@ -130,11 +140,16 @@ public class MainActivity extends AppCompatActivity {
         RoomsFragment roomsFragment = new RoomsFragment().newInstance();
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, roomsFragment).commit();
+                .add(R.id.fragment_container, roomsFragment)
+                .commit();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
