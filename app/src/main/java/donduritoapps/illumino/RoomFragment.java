@@ -2,16 +2,13 @@ package donduritoapps.illumino;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.SwitchCompat;
@@ -19,13 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -152,6 +151,10 @@ public class RoomFragment extends Fragment {
                 itemView = getActivity().getLayoutInflater().inflate(R.layout.item_room, parent, false);
             }
 
+
+            for (int i = 0; i< room.getStripes_num(); i++) {
+                startRequest(room.getIp(), "C" + ((i * 100)  + 10) + "_");
+            }
             // Find the room to work with.
 //            final MyRoom currentRoom = roomList.get(position);
             // Stripe Name:
@@ -160,9 +163,9 @@ public class RoomFragment extends Fragment {
             nameText.setText(stripeName);
 
             handleOnOffSwitch(itemView, position);
-            createPatternSelection(itemView);
-            createAnimationSwitch(itemView);
-            createColorButtons(itemView);
+            handleStripeAction(itemView, position);
+            handleStripeInterval(itemView, position);
+//            createColorButtons(itemView);
             createSliders(itemView);
 
             refreshFragment();
@@ -177,6 +180,7 @@ public class RoomFragment extends Fragment {
             switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d(DEBUG_TAG, "send_enable_" + position + ": " + send_enable.get(position));
                     if (send_enable.get(position)) {
                         String pattern = room.getPattern();
                         if (isChecked) {
@@ -193,136 +197,172 @@ public class RoomFragment extends Fragment {
             });
         }
 
-        private void createPatternSelection(final View itemView) {
+        private void handleStripeAction(final View itemView, final int position) {
             // Pattern Selection
-            View actionPattern = itemView.findViewById(R.id.action_Pattern);
-            if (actionPattern != null) {
-                actionPattern.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final AppCompatDialog dialog = new AppCompatDialog(getActivity());
-                        dialog.setContentView(R.layout.dialog_pattern);
-                        dialog.setTitle("Pattern");
-                        dialog.show();
+            View stripeActionView = itemView.findViewById(R.id.stripeAction);
+            stripeActionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AppCompatDialog dialog = new AppCompatDialog(getActivity());
+                    dialog.setContentView(R.layout.dialog_template);
+                    dialog.setTitle(stripeList.get(position));
 
-                        RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
-                        if (radioGroup == null) { return; }
-                        radioGroup.check(radioButtonSelection);
-                        Button buttonOK = (Button) dialog.findViewById(R.id.button_okay);
-                        if (buttonOK == null) { return; }
-                        buttonOK.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View v) {
-                                RadioGroup radioGroup = (RadioGroup) dialog.findViewById(R.id.radio_group);
-                                int selectedId = radioGroup.getCheckedRadioButtonId();
-                                radioButtonSelection = selectedId;
-                                // find the radiobutton by returned id
-                                RadioButton radioButton = (RadioButton) dialog.findViewById(selectedId);
-                                TextView txtViewPattern = (TextView) itemView.findViewById(R.id.textView_Pattern);
-                                String pattern = radioButton.getText().toString();
-                                txtViewPattern.setText(pattern);
-                                switch (pattern) {
-                                    case "Waves":
-                                        startRequest(room.getIp(), "P2");
-                                        break;
-                                    case "Rainbow Short":
-                                        startRequest(room.getIp(), "P3");
-                                        break;
-                                    case "Rainbow Long":
-                                        startRequest(room.getIp(), "P4");
-                                        break;
-                                    case "Theater":
-                                        startRequest(room.getIp(), "P6");
-                                        break;
-                                    case "Scanner":
-                                        startRequest(room.getIp(), "P8");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                //Snackbar.make(coordinatorLayout, radioButton.getText(), Snackbar.LENGTH_SHORT)
-                                //        .show();
-                                dialog.dismiss();
-                            }
-                        });
+                    LinearLayout linearLayout_dialog = (LinearLayout) dialog.findViewById(R.id.linearLayout_dialog);
 
-                        Button buttonCancel = (Button) dialog.findViewById(R.id.button_cancel);
-                        if (buttonCancel != null) {
-                            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                }
-                            });
+                    // GridView for setting Static Pattern
+                    GridView gV_staticButtons = new GridView(getContext());
+                    gV_staticButtons.setNumColumns(4);
+                    gV_staticButtons.setColumnWidth(GridView.AUTO_FIT);
+                    gV_staticButtons.setAdapter(new GridAdapter_pattern(getActivity(), position, "STATIC"));
+                    gV_staticButtons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            startRequest(room.getIp(), String.format("P%d%02d", position, i));
+                            dialog.dismiss();
                         }
-                    }
-                });
+                    });
+                    linearLayout_dialog.addView(gV_staticButtons);
 
+                    // GridView for setting Rainbow Pattern
+                    GridView gV_rainbowButtons = new GridView(getContext());
+                    gV_rainbowButtons.setNumColumns(4);
+                    gV_rainbowButtons.setColumnWidth(GridView.AUTO_FIT);
+                    gV_rainbowButtons.setAdapter(new GridAdapter_pattern(getActivity(), position, "RAINBOW"));
+                    gV_rainbowButtons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            startRequest(room.getIp(), String.format("P%d%02d", position, 20 + i));
+                            dialog.dismiss();
+                        }
+                    });
+                    linearLayout_dialog.addView(gV_rainbowButtons);
+
+                    // GridView for setting Fire Pattern
+                    GridView gV_fireButtons = new GridView(getContext());
+                    gV_fireButtons.setNumColumns(4);
+                    gV_fireButtons.setColumnWidth(GridView.AUTO_FIT);
+                    gV_fireButtons.setAdapter(new GridAdapter_pattern(getActivity(), position, "FIRE"));
+                    gV_fireButtons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            startRequest(room.getIp(), String.format("P%d%02d", position, 30 + i));
+                            dialog.dismiss();
+                        }
+                    });
+                    linearLayout_dialog.addView(gV_fireButtons);
+
+                    dialog.show();
+                }
+            });
+        }
+
+        private class GridAdapter_pattern extends BaseAdapter {
+            private Context mContext;
+            private int stripeNumber;
+            private int patternMax;
+            private String mode;
+
+            public GridAdapter_pattern(Context c, int stripeNr, String patternMode) {
+                this.stripeNumber = stripeNr;
+                this.mode = patternMode;
+                switch (mode) {
+                    case "STATIC":
+                    case "RAINBOW":
+                        this.patternMax = 10;
+                        break;
+                    case "FIRE":
+                        this.patternMax = 4;
+                    default:
+                        break;
+                }
+                mContext = c;
+            }
+
+            public int getCount() {
+                return patternMax;
+            }
+
+            public Object getItem(int position) {
+                return null;
+            }
+
+            public long getItemId(int position) {
+                return 0;
+            }
+
+            // create a new ImageView for each item referenced by the Adapter
+            public View getView(int position, View convertView, ViewGroup parent) {
+                ImageView imageView;
+                if (convertView == null) {
+                    // if it's not recycled, initialize some attributes
+                    imageView = new ImageView(mContext);
+                    imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setPadding(8, 8, 8, 8);
+                } else {
+                    imageView = (ImageView) convertView;
+                }
+
+                switch (mode) {
+                    case "STATIC":
+                        imageView.setImageResource(R.drawable.ic_brightness_1_white_36dp);
+                        imageView.setColorFilter(room.getColor(this.stripeNumber, position));
+                        break;
+                    case "RAINBOW":
+                        imageView.setImageResource(R.drawable.ic_lightbulb_outline_rainbow_24dp);
+                        break;
+                    case "FIRE":
+                        imageView.setImageResource(R.drawable.ic_fire_white_24dp);
+                    default:
+                        break;
+                }
+
+                return imageView;
             }
         }
 
-        private void createAnimationSwitch(View itemView) {
-            //Switch Button for Animation
-            SwitchCompat switchAnimation = (SwitchCompat) itemView.findViewById(R.id.switch_animation);
-            if (switchAnimation == null) { return; }
-            switchAnimation.setEnabled(true);
-            switchAnimation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        private void handleStripeInterval(final View itemView, final int position) {
+            ImageButton imageButton_Interval = (ImageButton) itemView.findViewById(R.id.imageButton_interval);
+            imageButton_Interval.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    String pattern = room.getPattern();
-                    if (isChecked) {
-                        switch (pattern) {
-                            case "1":
-                            case "5":
-                            case "7":
-                            case "98":
-                                startRequest(room.getIp(), "P2");
-                                break;
-                            default:
-                                break;
+                public void onClick(View v) {
+                    final AppCompatDialog dialog = new AppCompatDialog(getActivity());
+                    dialog.setContentView(R.layout.dialog_template);
+
+                    TextView dialogTitle = (TextView) dialog.findViewById(R.id.textView_dialogTitle);
+                    dialogTitle.setText(stripeList.get(position) + " Interval");
+
+                    LinearLayout ll_dialog = (LinearLayout) dialog.findViewById(R.id.linearLayout_dialog);
+
+                    final TextView textView_currentInterval = new TextView(getContext());
+                    textView_currentInterval.setText("display Intervall");
+                    ll_dialog.addView(textView_currentInterval);
+
+                    SeekBar seekBar_Interval = new SeekBar(getActivity());
+                    seekBar_Interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            double interval = Math.exp(0.08517 * progress);
+                            textView_currentInterval.setText(String.format("%.0fms", interval));
+                            Log.d(DEBUG_TAG, String.valueOf(interval));
                         }
-                    } else { // not checked
-                        switch (pattern) {
-                            case "1":
-                            case "5":
-                            case "7":
-                            case "98":
-                            case "97":
-                            case "99":
-                                break;
-                            default:
-                                startRequest(room.getIp(), "P5");
-                                break;
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
                         }
-                    }
-                }
-            });
-        }
 
-        private void createColorButtons(View itemView) {
-            // Button Color 1
-            Button button_color1 = (Button) itemView.findViewById(R.id.button_color1);
-            colorButtonListener(1, button_color1);
-            Button button_color2 = (Button) itemView.findViewById(R.id.button_color2);
-            colorButtonListener(2, button_color2);
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            int progress = seekBar.getProgress();
+                            double interval = Math.exp(0.08517 * progress);
+                            String message = String.format("I%d%04.0f", position, interval);
+                            startRequest(room.getIp(), message);
+                        }
+                    });
+                    ll_dialog.addView(seekBar_Interval);
 
-            Button button_colorSwap = (Button) itemView.findViewById(R.id.button_color_swap);
-            if (button_colorSwap == null) return;
-            button_colorSwap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startRequest(room.getIp(), "P7");
-                }
-            });
-        }
-
-        private void colorButtonListener(final int color_number, final Button button_color) {
-            button_color.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), ColorActivity.class);
-                    intent.putExtra("ROOM_IP", room.getIp());
-                    intent.putExtra("COLOR_NUMBER", color_number);
-                    intent.putExtra("ROOM_NAME", room.getName());
-                    startActivity(intent);
+                    dialog.show();
                 }
             });
         }
@@ -363,14 +403,9 @@ public class RoomFragment extends Fragment {
                 startRequest(room.getIp(), "P" + i + "_");
         }
 
-
         // turn off Spinner
         swipeRefreshLayout.setRefreshing(false);
     }
-
-
-
-
 
 
     public void startRequest(final String ip, final String message) {
@@ -405,144 +440,129 @@ public class RoomFragment extends Fragment {
 
     // extract information from result of a WebRequest
     private void processResponse(String serverIP, String request, String response) {
-        // resend request send if failed
-        if (!request.contains("_") && !response.equals(request)) {
-            //startRequest(serverIP, request);
-            Snackbar.make(fragment_view, "Request Error: " + request + "\nresponse: " + response, Snackbar.LENGTH_LONG).show();
-        } else {
-            if (!room.getIp().equals(serverIP)) {
-                return;
-            }
+        if (!room.getIp().equals(serverIP)) {
+            return;
+        }
 
-            char state = response.charAt(0);
-            String value = response.substring(1);
+        char state = response.charAt(0);
+        String value = response.substring(1);
 
-            switch (state) {
-                case 'M':    // PIR
-//                    ImageView imageView_pir = (ImageView) listChild.findViewById(R.id.item_imageIconPir);
-                    switch (value) {
-                        case "0":
-                            pir_enable = false;
-//                            imageView_pir.setVisibility(View.INVISIBLE);
-                            break;
-                        case "10":
-                            pir_enable = false;
-//                            imageView_pir.setVisibility(View.VISIBLE);
-//                            imageView_pir.setColorFilter(Color.GRAY);
-                            break;
-                        case "11":
-                            pir_enable = true;
-//                            imageView_pir.setVisibility(View.VISIBLE);
-//                            imageView_pir.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                            break;
-                        default:
-                            return;
-                    }
-                    for (int i = 0; i < room.getStripes_num(); i++)
-                        startRequest(room.getIp(), "P" + i + "_");
-                    break;
-                case 'P':   // process as Pattern
-                    processPattern(value);
-                    break;
-                case 'C':   // Color
-                    processColor(value);
-                    break;
-                case 'I':
-                    double progress = 11.74096 * Math.log(Integer.parseInt(value));
-                    room.setInterval((int) progress);
-                    Log.d(DEBUG_TAG, "progress: " + progress);
+        switch (state) {
+            case 'M':    // PIR
+                switch (value) {
+                    case "0":
+                        pir_enable = false;
+                        break;
+                    case "10":
+                        pir_enable = false;
+                        break;
+                    case "11":
+                        pir_enable = true;
+                        break;
+                    default:
+                        return;
+                }
+                for (int i = 0; i < room.getStripes_num(); i++)
+                    startRequest(room.getIp(), "P" + i + "_");
+                break;
+            case 'P':   // process as Pattern
+                processPattern(value);
+                break;
+            case 'C':   // Color
+                processColor(value);
+                break;
+            case 'I':
+                double progress = 11.74096 * Math.log(Integer.parseInt(value));
+                room.setInterval((int) progress);
+                Log.d(DEBUG_TAG, "progress: " + progress);
 //                    SeekBar slider_interval = (SeekBar) itemView.findViewById(R.id.seekBar_Interval);
 //                    slider_interval.setProgress((int) progress);
-                    break;
-                default:
-                    //Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
-            }
+                break;
+            default:
+                //Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void processPattern(String value) {
-        room.setPattern(value);
         int value_int = Integer.parseInt(value);
         int stripeNumber =  value_int / 100;
         int pattern = value_int % 100;
+        room.setPattern(stripeNumber, pattern);
 
         ListView list = (ListView) fragment_view.findViewById(R.id.roomListView);
         View listChild = list.getChildAt(stripeNumber);
 
         SwitchCompat switchCompatOnOff = (SwitchCompat) listChild.findViewById(R.id.switch_on_off);
         switchCompatOnOff.setEnabled(true);
-        switch (pattern) {
-            case 0:
-                if (pir_enable) {
-                    if (switchCompatOnOff.isChecked()) {
-                        send_enable.set(stripeNumber, false);
-                        switchCompatOnOff.setChecked(false);
-                    }
-                }
-                break;
-            default:
-                if (pir_enable) {
-                    if (!switchCompatOnOff.isChecked()) {
-                        send_enable.set(stripeNumber, false);
-                        switchCompatOnOff.setChecked(true);
-                    }
-                }
-                break;
+
+        // set Main Switch of the Stripe
+        if ( (pattern == 0) && (switchCompatOnOff.isChecked()) ) {
+            send_enable.set(stripeNumber, false);
+            switchCompatOnOff.setChecked(false);
+        }
+        else if ( !(pattern == 0) && !(switchCompatOnOff.isChecked()) ) {
+            send_enable.set(stripeNumber, false);
+            switchCompatOnOff.setChecked(true);
         }
 
-//        TextView txtViewPattern = (TextView) itemView.findViewById(R.id.textView_Pattern);
-//        String pattern;
-//        switch (value) {
-//            case "2":
-//                pattern = "Waves";
-//                break;
-//            case "3":
-//                pattern = "Rainbow Short";
-//                break;
-//            case "4":
-//                pattern = "Rainbow Long";
-//                break;
-//            case "6":
-//                pattern = "Theater";
-//                break;
-//            case "8":
-//                pattern = "Scanner";
-//                break;
-//            default:
-//                pattern = "-";
-//                break;
-//        }
-//        txtViewPattern.setText(pattern);
+        // set Icon of the Stripe
+        ImageView imageView_icon = (ImageView) listChild.findViewById(R.id.imageView_stripeIcon);
+        if ( (pattern >= 0) && (pattern <= 9) ) {
+            imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
+            startRequest(room.getIp(), "C" + ((stripeNumber *100) + pattern) + "_");
+        }
+        else if ( (pattern >= 20) && (pattern <= 29) ) {
+            imageView_icon.clearColorFilter();
+            imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_rainbow_24dp);
+
+        }
+        else if ( (pattern >= 30) && (pattern <= 33) ) {
+            imageView_icon.setImageResource(R.drawable.ic_fire_white_24dp);
+            imageView_icon.setColorFilter(Color.RED);
+        }
+        room.setPattern(stripeNumber, pattern);
     }
 
     private void processColor(String value) {
-        if (value.length() == 10) {
-            char colorNumber = value.charAt(0);
-            int red = Integer.parseInt(value.substring(1, 4));
-            int green = Integer.parseInt(value.substring(4, 7));
-            int blue = Integer.parseInt(value.substring(7, 10));
+        if (value.contains(":")) {
+            int value_info = Integer.parseInt(value.split(":")[0]);
+            int stripeNumber = value_info / 100;
+            int colorNumber = value_info % 100;
+            String color_string = value.split(":")[1];
+            int color;
+            int red;
+            int green;
+            int blue;
 
-            int color = Color.rgb(red, green, blue);
+            if ( color_string.contains(";")) {
+                if (colorNumber == 10) {
+                    for (int i = 0; i <= 9; i++) {
+                        red = Integer.parseInt(color_string.split(";")[i].split(",")[0]);
+                        green = Integer.parseInt(color_string.split(";")[i].split(",")[1]);
+                        blue = Integer.parseInt(color_string.split(";")[i].split(",")[2]);
+                        color = Color.rgb(red, green, blue);
+                        room.setColor(stripeNumber, i, color);
+                    }
+                }
+            }
+            else {
+                red = Integer.parseInt(color_string.split(",")[0]);
+                green = Integer.parseInt(color_string.split(",")[1]);
+                blue = Integer.parseInt(color_string.split(",")[2]);
 
+                color = Color.rgb(red, green, blue);
+                room.setColor(stripeNumber, colorNumber, color);
 
-//            switch (colorNumber) {
-//                case '1':
-//                    // get color view from card to change tint
-//                    Button button_color1 = (Button) itemView.findViewById(R.id.button_color1);
-//                    room.setColor1(color);
-//                    button_color1.setBackgroundColor(color);
-//                    break;
-//                case '2':
-//                    // get color view from card to change tint
-//                    Button button_color2 = (Button) itemView.findViewById(R.id.button_color2);
-//                    room.setColor2(color);
-//                    button_color2.setBackgroundColor(color);
-//                    break;
-//                default:
-//                    //Snackbar.make(coordinatorLayout, "C_ERR_number: " + colorNumber, Snackbar.LENGTH_LONG).show();
-//            }
-        } else {
-           // Snackbar.make(coordinatorLayout, "C_ERR_value: " + value, Snackbar.LENGTH_LONG).show();
+                // get color view from card to change tint
+                ListView list = (ListView) fragment_view.findViewById(R.id.roomListView);
+                View listChild = list.getChildAt(stripeNumber);
+                ImageView imageView_icon = (ImageView) listChild.findViewById(R.id.imageView_stripeIcon);
+                if (colorNumber == 0)
+                    imageView_icon.setColorFilter(Color.DKGRAY);
+                else
+                    imageView_icon.setColorFilter(color);
+
+            }
         }
     }
 

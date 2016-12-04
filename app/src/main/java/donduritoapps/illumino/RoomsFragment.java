@@ -359,7 +359,7 @@ public class RoomsFragment extends Fragment {
 
             if ( (color_number >= 0) && (color_number <= 9) ) {
                 stripe_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
-                startRequest(room.getIp(), "C" + stripe_number + color_number + "_");
+                startRequest(room.getIp(), "C" + ((stripe_number * 100) + color_number) + "_");
             }
             else if ( (color_number >= 20) && (color_number <= 29) ) {
                 stripe_icon.clearColorFilter();
@@ -375,17 +375,15 @@ public class RoomsFragment extends Fragment {
     }
 
     void processColor(View listChild, MyRoom room, String value) {
-        if ( (value.length() == 10) || (value.length() == 11)) {
-            int stripeNumber = 0;
-            int offset = 0;
-            if (value.length() == 11) {
-                stripeNumber = value.charAt(0) - '0';
-                offset = 1;
-            }
-            int colorNumber = value.charAt(0 + offset) - '0';
-            int red = Integer.parseInt(value.substring(1 + offset, 4 + offset));
-            int green = Integer.parseInt(value.substring(4 + offset, 7 + offset));
-            int blue = Integer.parseInt(value.substring(7 + offset, 10 + offset));
+        if (value.contains(":")) {
+            int value_info = Integer.parseInt(value.split(":")[0]);
+            int stripeNumber = value_info / 100;
+            int colorNumber = value_info % 100;
+            String color_string = value.split(":")[1];
+
+            int red = Integer.parseInt(color_string.split(",")[0]);
+            int green = Integer.parseInt(color_string.split(",")[1]);
+            int blue = Integer.parseInt(color_string.split(",")[2]);
 
             int color = Color.rgb(red, green, blue);
 
@@ -397,8 +395,6 @@ public class RoomsFragment extends Fragment {
                 lightbulb.setColorFilter(Color.DKGRAY);
             else
                 lightbulb.setColorFilter(color);
-        } else {
-            Toast.makeText(getActivity(), "C_ERR_value: " + value.length(), Toast.LENGTH_LONG).show();
         }
     }
 }

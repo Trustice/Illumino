@@ -82,7 +82,8 @@
                         android:layout_centerVertical="true"
                         android:layout_below="@id/item_txtName"
                         android:orientation="horizontal"
-                        android:layout_alignStart="@id/item_txtName">
+                        android:layout_alignStart="@id/item_txtName"
+                        android:layout_marginTop="4dp">
 
 
                     </LinearLayout>

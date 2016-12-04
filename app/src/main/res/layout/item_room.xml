@@ -5,222 +5,111 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:layout_gravity="center"
-        card_view:cardCornerRadius="4dp"
-        card_view:contentPadding="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="72dp"
+            android:layout_marginStart="8dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="48dp">
-
-                <TextView
-                    android:id="@+id/textView_StripeName"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:text="Stripe Name"
-                    android:layout_marginStart="8dp"
-                    android:layout_gravity="center_vertical" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:id="@+id/switch_on_off"
-                    android:layout_gravity="center_vertical"
-                    android:checked="false"
-                    android:enabled="false"
-                    android:layout_marginEnd="8dp" />
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#1effffff" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
+            <RelativeLayout
+                android:id="@+id/stripeAction"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
-                    android:scaleType="center" />
-
-                <SeekBar
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/seekBar_Interval"
+                    android:src="@drawable/av_background_40dp"
                     android:layout_marginStart="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_gravity="center_vertical"
-                    />
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/imageView_stripeIcon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_fire_white_24dp"
+                    android:scaleType="center"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
-                    android:layout_width="48dp"
+                    android:id="@+id/textView_StripeName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="100ms"
-                    android:id="@+id/textView_interval"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="Stripe Name"
+                    android:layout_toEndOf="@id/imageView_stripeIcon"
+                    android:layout_marginStart="8dp"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/imageButton_brightness"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorTransparent"
+                android:src="@drawable/ic_brightness_medium_white_24dp"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageButton
+                android:id="@+id/imageButton_interval"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/colorTransparent"
+                android:src="@drawable/ic_timer_white_24dp"
+                android:layout_gravity="center_vertical"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/switch_on_off"
+                android:layout_gravity="center_vertical"
+                android:checked="false"
+                android:enabled="false"
+                android:layout_marginEnd="8dp" />
 
 
-            </LinearLayout>
         </LinearLayout>
 
 
-
-    </android.support.v7.widget.CardView>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:id="@+id/action_Pattern">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:text="Muster"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="16dp"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentStart="true"
-            android:paddingBottom="20dp"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/textView_Pattern" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Animation"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="16dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:paddingTop="20dp" />
-
-        <android.support.v7.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_animation"
-            android:layout_gravity="center_vertical"
-            android:checked="false"
-            android:enabled="false"
-            android:layout_marginRight="16dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#1effffff"/>
+        android:background="#1effffff" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="104dp">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_keyboard_arrow_down_white_24dp"
+            android:scaleType="center" />
+
+        <SeekBar
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar_Interval"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center_vertical"
+            />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Color"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:id="@+id/textView6"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:paddingTop="20dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="Color 1"
-            android:id="@+id/button_color1"
-            android:textAlignment="center"
-            android:layout_marginLeft="16dp"
-            android:background="@color/colorPrimary"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
-            style="@style/Base.TextAppearance.AppCompat.Button" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="Color 2"
-            android:id="@+id/button_color2"
-            android:layout_marginLeft="8dp"
-            android:background="@color/colorPrimaryDark"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/button_color1"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="Swap"
-            android:id="@+id/button_color_swap"
-            android:layout_marginLeft="8dp"
-            android:background="#5a595b"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="16dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#1effffff"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="104dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:text="Geschwindigkeit"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:paddingTop="20dp"
-            android:id="@+id/textView2" />
+            android:text="100ms"
+            android:id="@+id/textView_interval"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
 
 
-
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#1effffff"/>
+    </LinearLayout>
 
 </LinearLayout>

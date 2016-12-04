@@ -18,7 +18,7 @@ public class MyRoom {
     private String name, ip, pattern, stripe_names;
     private int iconID, color1, color2, interval, stripes_num;
     private boolean dht, pir;
-    private List<List<Integer>> colorLists= new ArrayList<List<Integer>>();
+    private List<List<Integer>> colorLists = new ArrayList<List<Integer>>();
     private List<Integer> patternList = new ArrayList<Integer>();
 
     public MyRoom(String name, String ip, int iconID, String stripeNames, boolean dhtState, boolean pirState) {
@@ -31,8 +31,13 @@ public class MyRoom {
         this.stripes_num = stripeNames.split(",").length;
         this.dht = dhtState;
         this.pir = pirState;
+
+        List<Integer> colorList = new ArrayList<>();
+        for (int j = 0; j <= 9; j++)
+            colorList.add(j, 0);
         for (int i = 0; i < this.stripes_num; i++) {
             this.patternList.add(i, 0);
+            this.colorLists.add(i, colorList);
         }
     }
 
@@ -93,5 +98,16 @@ public class MyRoom {
         if (stripes_index >= this.stripes_num)
             return 0;
         return this.patternList.get(stripes_index);
+    }
+
+    public void setColor(int stripes_index, int color_index, int color) {
+        List<Integer> colorList = this.colorLists.get(stripes_index);
+        colorList.set(color_index, color);
+        this.colorLists.set(stripes_index, colorList);
+    }
+
+    public int getColor(int stripes_index, int color_index) {
+        List<Integer> colorList = this.colorLists.get(stripes_index);
+        return colorList.get(color_index);
     }
 }
