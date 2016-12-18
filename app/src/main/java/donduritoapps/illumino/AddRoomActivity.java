@@ -28,9 +28,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-public class AddRoomActivity extends AppCompatActivity {
-    private static final String DEBUG_TAG = "*** RoomFragment";
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+public class AddRoomActivity extends AppCompatActivity {
+    private static final String DEBUG_TAG = "*** AddRoomActivity";
+
+    private JSONObject jObj_room;
     private Integer[] avatarIds = {
             R.drawable.ic_build_white_24dp,
             R.drawable.ic_weekend_white_24dp,
@@ -108,26 +113,14 @@ public class AddRoomActivity extends AppCompatActivity {
         if (id == R.id.action_save) {
             Intent returnIntent = new Intent();
 
-            EditText roomName = (EditText) findViewById(R.id.editText_newRoomName);
-            returnIntent.putExtra("ROOM_NAME",roomName.getText().toString());
-
-            EditText roomIP = (EditText) findViewById(R.id.editText_newRoomIP);
-            returnIntent.putExtra("ROOM_IP", roomIP.getText().toString());
-
-            returnIntent.putExtra("ROOM_ICON", avatarIds[avatarSelectionIndex]);
-            setResult(AddRoomActivity.RESULT_OK, returnIntent);
-
-            EditText roomStripes = (EditText) findViewById(R.id.editText_newRoomStripes);
-            returnIntent.putExtra("ROOM_STRIPE_NAMES", roomStripes.getText().toString());
-
-            ImageView imageView_dht_state = (ImageView) findViewById(R.id.imageView_dhtState);
-            if (imageView_dht_state.isEnabled()) { returnIntent.putExtra("ROOM_DHT", true); }
-            else { returnIntent.putExtra("ROOM_DHT", false); }
-
-            ImageView imageView_pir_state = (ImageView) findViewById(R.id.imageView_pirState);
-            if (imageView_dht_state.isEnabled()) { returnIntent.putExtra("ROOM_PIR", true); }
-            else { returnIntent.putExtra("ROOM_PIR", false); }
-
+            try {
+                jObj_room.put("icon_id", avatarIds[avatarSelectionIndex]);
+            } catch (JSONException e) {
+                Log.e(DEBUG_TAG, "unexpected JSON exception", e);
+            }
+            Log.d(DEBUG_TAG, jObj_room.toString());
+            returnIntent.putExtra("ROOM_JSON", jObj_room.toString());
+            setResult(RESULT_OK, returnIntent);
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -203,36 +196,115 @@ public class AddRoomActivity extends AppCompatActivity {
     }
 
     private void processResponse(String serverIP, String request, String response) {
-        if (serverIP.equals("192.168.178.80")) {
-            response = "VER:0.1\nNAME:Küche\nSTRIPES:Decke,Arbeitsfläche\nDHT:Y\nPIR:Y";
-            Log.d(DEBUG_TAG, serverIP);
-        }
-        String version = response.split("\n")[0];
+        /* response - JSON Object:
+            {
+                "version":"v0.11",
+                "date":"Dec 14 2016 21:28:23",
+                "name":"TestRoom",
+                "stripes":["D3","D4"],
+                "dht":
+                {
+                "t_uuid":"17f94ff0-49ea-11e6-b180-3313562e4688",
+                "h_uuid":"2c928490-49ea-11e6-a029-f5281b8b5d4d"
+                },
+                "pir":true
+            }
+         */
+        if (serverIP.equals("192.168.178.80"))
+            response = "{\"version\":\"v0.10\",\"date\":\"Dec 10 2016 21:30:54\",\"name\":\"Küche\",\"stripes\":[\"Decke\",\"Arbeitsfläche\"],\"dht\":{\"t_uuid\":\"1641b790-4799-11e6-9031-f75b35dde6e3\",\"h_uuid\":\"40fa9140-4799-11e6-9bab-5733c696a2e6\"},\"pir\":true}";
 
-        String room_name = response.split("\n")[1].split(":")[1];
-        EditText editText_room_name = (EditText) findViewById(R.id.editText_newRoomName);
-        editText_room_name.setText(room_name);
+        try {
+            jObj_room = new JSONObject(response);
 
-        String room_stripes = response.split("\n")[2].split(":")[1];
-        EditText editText_room_stripes = (EditText) findViewById(R.id.editText_newRoomStripes);
-        editText_room_stripes.setText(room_stripes);
+            jObj_room.put("ip", serverIP);
 
-        String room_dht_available = response.split("\n")[3].split(":")[1];
-        TextView textView_dht_state = (TextView) findViewById(R.id.textView_dht_state);
-        if (room_dht_available.equals("Y")) {
-            textView_dht_state.setEnabled(true);
-        }
-        else {
-            textView_dht_state.setEnabled(false);
-        }
+            TextView textView_appVersion = (TextView) findViewById(R.id.textView_appVersion);
+            textView_appVersion.setText(jObj_room.getString("version"));
+            textView_appVersion.setVisibility(View.VISIBLE);
 
-        String room_pir_available = response.split("\n")[4].split(":")[1];
-        TextView textView_pir_state = (TextView) findViewById(R.id.textView_pir_state);
-        if (room_pir_available.equals("Y")) {
-            textView_pir_state.setEnabled(true);
+            TextView textView_compileDate = (TextView) findViewById(R.id.textView_compileDate);
+            textView_compileDate.setText(jObj_room.getString("date"));
+            textView_compileDate.setVisibility(View.VISIBLE);
+
+            String room_name = jObj_room.getString("name").replace("Ã¼", "ü");
+            EditText editText_room_name = (EditText) findViewById(R.id.editText_newRoomName);
+            editText_room_name.setText(room_name);
+
+            JSONArray stripes_arr = jObj_room.getJSONArray("stripes");
+            String room_stripes = "";
+            for (int i=0; i < stripes_arr.length(); i++) {
+                room_stripes += stripes_arr.getString(i);
+                if (i != stripes_arr.length() - 1)
+                    room_stripes += ",";
+            }
+            EditText editText_room_stripes = (EditText) findViewById(R.id.editText_newRoomStripes);
+            editText_room_stripes.setText(room_stripes);
+
+            JSONObject jObj_dht = jObj_room.getJSONObject("dht");
+            TextView textView_dht_state = (TextView) findViewById(R.id.textView_dht_state);
+            textView_dht_state.setText("DHT");
+            TextView textView_temp_uuid = (TextView) findViewById(R.id.editText_newRoomTempUUID);
+            TextView textView_humid_uuid = (TextView) findViewById(R.id.editText_newRoomHumidUUID);
+
+            String t_uuid = jObj_dht.getString("t_uuid");
+            if (!t_uuid.equals("nan")) {
+                textView_dht_state.setEnabled(true);
+                textView_temp_uuid.setText(t_uuid);
+                textView_temp_uuid.setVisibility(View.VISIBLE);
+
+                String h_uuid = jObj_dht.getString("h_uuid");
+                textView_humid_uuid.setText(h_uuid);
+                textView_humid_uuid.setVisibility(View.VISIBLE);
+            }
+            else {
+                textView_dht_state.setEnabled(false);
+                textView_temp_uuid.setVisibility(View.INVISIBLE);
+                textView_humid_uuid.setVisibility(View.INVISIBLE);
+            }
+
+            boolean room_pir_available = jObj_room.getBoolean("pir");
+            TextView textView_pir_state = (TextView) findViewById(R.id.textView_pir_state);
+            textView_pir_state.setText("PIR");
+            textView_pir_state.setEnabled(room_pir_available);
+
+        } catch (JSONException e) {
+            Log.e(DEBUG_TAG, "unexpected JSON exception", e);
         }
-        else {
-            textView_pir_state.setEnabled(false);
-        }
+//        String version = response.split("\n")[0];
+
+//        String room_name = response.split("\n")[1].split(":")[1];
+//        room_name = room_name.replace("Ã¼", "ü");
+//        EditText editText_room_name = (EditText) findViewById(R.id.editText_newRoomName);
+//        editText_room_name.setText(room_name);
+
+//        String room_stripes = response.split("\n")[2].split(":")[1];
+//        EditText editText_room_stripes = (EditText) findViewById(R.id.editText_newRoomStripes);
+//        editText_room_stripes.setText(room_stripes);
+//
+//        String room_dht_available = response.split("\n")[3].split(":")[1];
+//        TextView textView_dht_state = (TextView) findViewById(R.id.textView_dht_state);
+//        textView_dht_state.setText("DHT");
+//        Log.d(DEBUG_TAG, room_dht_available.split(";")[0]);
+//        if ( room_dht_available.contains(";") && room_dht_available.split(";")[0].equals("Y") ) {
+//            textView_dht_state.setEnabled(true);
+//
+//            TextView textView_temp_uuid = (TextView) findViewById(R.id.editText_newRoomTempUUID);
+//            textView_temp_uuid.setText(room_dht_available.split(";")[1].split("#")[1]);
+//            textView_temp_uuid.setVisibility(View.VISIBLE);
+//
+//            TextView textView_humid_uuid = (TextView) findViewById(R.id.editText_newRoomHumidUUID);
+//            textView_humid_uuid.setText(room_dht_available.split(";")[2].split("#")[1]);
+//            textView_humid_uuid.setVisibility(View.VISIBLE);
+//        } else {
+//            textView_dht_state.setEnabled(false);
+//        }
+//
+//        String room_pir_available = response.split("\n")[4].split(":")[1];
+//        TextView textView_pir_state = (TextView) findViewById(R.id.textView_pir_state);
+//        textView_pir_state.setText("PIR");
+//        if (room_pir_available.equals("Y"))
+//            textView_pir_state.setEnabled(true);
+//        else
+//            textView_pir_state.setEnabled(false);
     }
 }

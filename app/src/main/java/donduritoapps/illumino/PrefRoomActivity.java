@@ -35,12 +35,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PrefRoomActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "*** Illumino PrefRoom";
     private List<MyRoom> roomList = new ArrayList<MyRoom>();
+    private List<String> jObj_roomList = new ArrayList<>();
     ArrayAdapter<MyRoom> adapter;
 
     @Override
@@ -92,6 +96,10 @@ public class PrefRoomActivity extends AppCompatActivity {
 
         if (id == R.id.action_delete_list) {
             roomList.clear();
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.commit();
             adapter.notifyDataSetChanged();
         }
 
@@ -102,16 +110,8 @@ public class PrefRoomActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
             editor.putInt("ROOM_COUNT", roomList.size());
-            Log.d(DEBUG_TAG, "Stripes Num:" + roomList.size());
             for (int i = 0; i < roomList.size(); i++) {
-                String roomNumber = String.valueOf(i);
-                MyRoom room = roomList.get(i);
-                editor.putString("ROOM_NAME_" + roomNumber, room.getName());
-                editor.putString("ROOM_IP_" + roomNumber, room.getIp());
-                editor.putInt("ROOM_ICON_" + roomNumber, room.getIconID());
-                editor.putString("ROOM_STRIPE_NAMES_" + roomNumber, room.getStripeNames());
-                editor.putBoolean("ROOM_DHT_STATE_" + roomNumber, room.getDhtState());
-                editor.putBoolean("ROOM_PIR_STATE_" + roomNumber, room.getPirState());
+                editor.putString("ROOM_JSON_" + i, jObj_roomList.get(i));
             }
             editor.commit();
             finish();
@@ -123,20 +123,30 @@ public class PrefRoomActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d(DEBUG_TAG, String.valueOf(requestCode));
         switch(requestCode) {
             case (1) : {
                 if (resultCode == Activity.RESULT_OK) {
-                    String newRoomName = data.getStringExtra("ROOM_NAME");
-                    String newRoomIP = data.getStringExtra("ROOM_IP");
-                    int newRoomIcon = data.getIntExtra("ROOM_ICON", R.drawable.ic_build_white_24dp);
-                    String newRoomStripeNames = data.getStringExtra("ROOM_STRIPE_NAMES");
-                    boolean newRoomDHT = data.getBooleanExtra("ROOM_DHT", false);
-                    boolean newRoomPIR = data.getBooleanExtra("ROOM_PIR", false);
-//                    Toast.makeText(PrefRoomActivity.this, newRoomName, Toast.LENGTH_LONG).show();
-//                    Toast.makeText(PrefRoomActivity.this, newRoomIP, Toast.LENGTH_LONG).show();
-                    roomList.add(new MyRoom(newRoomName, newRoomIP, newRoomIcon, newRoomStripeNames, newRoomDHT, newRoomPIR));
+                    Log.d(DEBUG_TAG, "new room added");
+                    // Add new room to preferences
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+
+                    int newRoomNumber = roomList.size();
+                    editor.remove("ROOM_COUNT");
+                    editor.putInt("ROOM_COUNT", roomList.size()+1);
+
+                    String json_string = data.getStringExtra("ROOM_JSON");
+                    Log.d(DEBUG_TAG, json_string);
+                    editor.putString("ROOM_JSON_" + newRoomNumber, json_string);
+                    editor.commit();
+
+
+                    jObj_roomList.add(newRoomNumber, json_string);
+                    roomList.add(new MyRoom(this, newRoomNumber));
                     adapter.notifyDataSetChanged();
-                }
+                } else
+                    Log.d(DEBUG_TAG, "resultCode Error!!!");
                 break;
             }
         }
@@ -144,17 +154,10 @@ public class PrefRoomActivity extends AppCompatActivity {
 
     private void populateListView() {
         // Load from Preferences
-//        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         for (int i = 0; i < sharedPref.getInt("ROOM_COUNT", 0); i++) {
-            String roomNumber = String.valueOf(i);
-            String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
-            String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
-            int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
-            String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
-            boolean roomDht = sharedPref.getBoolean("ROOM_DHT_STATE_" + roomNumber, false);
-            boolean roomPir = sharedPref.getBoolean("ROOM_PIR_STATE_" + roomNumber, false);
-            roomList.add(new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir));
+            roomList.add(new MyRoom(this, i));
+            jObj_roomList.add(sharedPref.getString("ROOM_JSON_" + i, "{ }"));
         }
         adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.listViewRoomSettings);
@@ -177,33 +180,51 @@ public class PrefRoomActivity extends AppCompatActivity {
             }
 
             // Find the room to work with.
-            final MyRoom currentRoom = roomList.get(position);
+            final MyRoom room = roomList.get(position);
 
             // Fill the view
             // Icon:
             ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);
-            imageView.setImageResource(currentRoom.getIconID());
+            imageView.setImageResource(room.getIconID());
 
             // Name:
             TextView nameText = (TextView) itemView.findViewById(R.id.item_txtName);
-            nameText.setText(currentRoom.getName());
+            nameText.setText(room.getName());
 
             // IP:
             TextView ipText = (TextView) itemView.findViewById(R.id.item_textIP);
-            ipText.setText(currentRoom.getIp());
+            ipText.setText(room.getIp());
 
             // Stripe Names
             TextView stripeNamesText = (TextView) itemView.findViewById(R.id.item_textStripes);
-            stripeNamesText.setText(currentRoom.getStripeNames());
+            String stripeNames = "";
+            for (int i=0; i < room.getStripes_num(); i++) {
+                stripeNames += room.getStripeName(i);
+                if (i < room.getStripes_num() - 1)
+                    stripeNames += ", ";
+            }
+            stripeNamesText.setText(stripeNames);
 
             // DHT:
             TextView dhtText = (TextView) itemView.findViewById(R.id.item_textDHT);
-            if (currentRoom.getDhtState()) { dhtText.setEnabled(true); }
+            dhtText.setText("DHT");
+            if (room.getDhtState()) {
+                dhtText.setEnabled(true);
+
+                TextView textView_tempUuid = (TextView) itemView.findViewById(R.id.item_textTempUUID);
+                textView_tempUuid.setText(room.getTemperatureUuid());
+                textView_tempUuid.setVisibility(View.VISIBLE);
+
+                TextView textView_humidUuid = (TextView) itemView.findViewById(R.id.item_textHumidUUID);
+                textView_humidUuid.setText(room.getHumidityUuid());
+                textView_humidUuid.setVisibility(View.VISIBLE);
+            }
             else { dhtText.setEnabled(false); }
 
             // PIR:
             TextView pirText = (TextView) itemView.findViewById(R.id.item_textPIR);
-            if (currentRoom.getDhtState()) { pirText.setEnabled(true); }
+            pirText.setText("PIR");
+            if (room.getPirState()) { pirText.setEnabled(true); }
             else { pirText.setEnabled(false); }
 
             // Button Up:
@@ -247,10 +268,16 @@ public class PrefRoomActivity extends AppCompatActivity {
             if (delta == 1) {
                 roomList.add(position, roomList.get(position + 1));
                 roomList.remove(position + 2);
+
+                jObj_roomList.add(position, jObj_roomList.get(position + 1));
+                jObj_roomList.remove(position + 2);
             }
             else {
                 roomList.add(position - 1, roomList.get(position));
                 roomList.remove(position + 1);
+
+                jObj_roomList.add(position - 1, jObj_roomList.get(position));
+                jObj_roomList.remove(position + 1);
             }
             adapter.notifyDataSetChanged();
         }

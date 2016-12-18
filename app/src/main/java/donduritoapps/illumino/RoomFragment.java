@@ -2,24 +2,37 @@ package donduritoapps.illumino;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.SwitchCompat;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,6 +54,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import static donduritoapps.illumino.R.id.cast_notification_id;
+//import static donduritoapps.illumino.R.id.coordinatorLayout;
 
 
 /**
@@ -64,6 +80,8 @@ public class RoomFragment extends Fragment {
     private int radioButtonSelection;
     private boolean pir_enable = true;
     private List<Boolean> send_enable = new ArrayList<>();
+    private SwitchCompat switch_Toolbar;
+    private Boolean send_main_switch_enable = true;
 
     public RoomFragment() {
         // Required empty public constructor
@@ -89,18 +107,99 @@ public class RoomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String roomNumber = String.valueOf(getArguments().getInt(ARG_ROOM_INDEX));
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String roomName = sharedPref.getString("ROOM_NAME_" + roomNumber, "Error");
-        String roomIP = sharedPref.getString("ROOM_IP_" + roomNumber, "Error");
-        int roomIcon = sharedPref.getInt("ROOM_ICON_" + roomNumber, 0);
-        String roomStripeNames = sharedPref.getString("ROOM_STRIPE_NAMES_" + roomNumber, "Error");
-        boolean roomDht = sharedPref.getBoolean("ROOM_DHT_" + roomNumber, false);
-        boolean roomPir = sharedPref.getBoolean("ROOM_PIR_" + roomNumber, false);
-
-        room = new MyRoom(roomName, roomIP, roomIcon, roomStripeNames, roomDht, roomPir);
-//        roomList.add(room);
+        setHasOptionsMenu(true);
+        room = new MyRoom(getContext(), getArguments().getInt(ARG_ROOM_INDEX));
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_room, menu);
+
+        MenuItem item_switch_Toolbar = menu.findItem(R.id.action_switch);
+        switch_Toolbar = (SwitchCompat) item_switch_Toolbar.getActionView().findViewById(R.id.switchForActionBar);
+        switch_Toolbar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (send_main_switch_enable) {
+                    if (isChecked) {
+                        startRequest(room.getIp(), "P" + (room.getStripes_num() * 100 + 1));
+                    } else {
+                        startRequest(room.getIp(), "P" + (room.getStripes_num() * 100));
+                    }
+                    refreshFragment();
+                }
+                send_main_switch_enable = true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_brightness) {
+            int brightness = room.getBrightness();
+
+            final AppCompatDialog dialog = new AppCompatDialog(getActivity());
+            dialog.setContentView(R.layout.dialog_template);
+
+            TextView dialogTitle = (TextView) dialog.findViewById(R.id.textView_dialogTitle);
+            dialogTitle.setText("Helligkeit");
+
+            LinearLayout ll_dialog = (LinearLayout) dialog.findViewById(R.id.linearLayout_dialog);
+
+            TextInputLayout textInputLayout_brightness = new TextInputLayout(getActivity());
+            textInputLayout_brightness.setHint("0 - 255");
+            final TextInputEditText editText_brightness = new TextInputEditText(getActivity());
+            textInputLayout_brightness.addView(editText_brightness);
+            editText_brightness.setText(String.valueOf(brightness));
+            ll_dialog.addView(textInputLayout_brightness);
+
+//            final TextView textView_currentBrightness = new TextView(getContext());
+//            textView_currentBrightness.setText(String.valueOf(brightness));
+//            ll_dialog.addView(textView_currentBrightness);
+
+            SeekBar seekBar_Brightness = new SeekBar(getActivity());
+            seekBar_Brightness.setProgress(brightness / 5);
+            seekBar_Brightness.setMax(51); // 51 * 5 = 255
+            seekBar_Brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    editText_brightness.setText(String.valueOf(progress * 5));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    int progress = seekBar.getProgress();
+                    String message = "B" + progress * 5;
+                    startRequest(room.getIp(), message);
+                }
+            });
+            ll_dialog.addView(seekBar_Brightness);
+
+            dialog.show();
+        }
+
+        if (id == R.id.action_exit) {
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(homeIntent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,7 +210,7 @@ public class RoomFragment extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle(room.getName());
 
         for (int i = 0; i < room.getStripes_num(); i++) {
-            stripeList.add(room.getStripeNames().split(",")[i]);
+            stripeList.add(room.getStripeName(i));
             send_enable.add(i, true);
         }
 
@@ -127,6 +226,11 @@ public class RoomFragment extends Fragment {
                 }
         );
 
+        for (int i=0; i < room.getStripes_num(); i++) {
+            startRequest(room.getIp(), "C" + ((i * 100)  + 10) + "_");
+        }
+        startRequest(room.getIp(), "B_");
+        refreshFragment();
         return fragment_view;
     }
 
@@ -151,10 +255,6 @@ public class RoomFragment extends Fragment {
                 itemView = getActivity().getLayoutInflater().inflate(R.layout.item_room, parent, false);
             }
 
-
-            for (int i = 0; i< room.getStripes_num(); i++) {
-                startRequest(room.getIp(), "C" + ((i * 100)  + 10) + "_");
-            }
             // Find the room to work with.
 //            final MyRoom currentRoom = roomList.get(position);
             // Stripe Name:
@@ -165,10 +265,6 @@ public class RoomFragment extends Fragment {
             handleOnOffSwitch(itemView, position);
             handleStripeAction(itemView, position);
             handleStripeInterval(itemView, position);
-//            createColorButtons(itemView);
-            createSliders(itemView);
-
-            refreshFragment();
 
             return itemView;
         }
@@ -182,12 +278,12 @@ public class RoomFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.d(DEBUG_TAG, "send_enable_" + position + ": " + send_enable.get(position));
                     if (send_enable.get(position)) {
-                        String pattern = room.getPattern();
+                        int pattern = room.getPattern(position);
                         if (isChecked) {
-                            if ((room.getPattern(position) == 0))
+                            if (pattern == 0)
                                 startRequest(room.getIp(), "P" + (position * 100 + 1));
                         } else {
-                            if (!(room.getPattern(position) == 0))
+                            if (!(pattern == 0))
                                 startRequest(room.getIp(), "P" + (position * 100));
                         }
                         refreshFragment();
@@ -322,10 +418,11 @@ public class RoomFragment extends Fragment {
         }
 
         private void handleStripeInterval(final View itemView, final int position) {
-            ImageButton imageButton_Interval = (ImageButton) itemView.findViewById(R.id.imageButton_interval);
+            final ImageButton imageButton_Interval = (ImageButton) itemView.findViewById(R.id.imageButton_interval);
             imageButton_Interval.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final int interval = room.getInterval(position);
                     final AppCompatDialog dialog = new AppCompatDialog(getActivity());
                     dialog.setContentView(R.layout.dialog_template);
 
@@ -334,17 +431,58 @@ public class RoomFragment extends Fragment {
 
                     LinearLayout ll_dialog = (LinearLayout) dialog.findViewById(R.id.linearLayout_dialog);
 
-                    final TextView textView_currentInterval = new TextView(getContext());
-                    textView_currentInterval.setText("display Intervall");
-                    ll_dialog.addView(textView_currentInterval);
+
+                    final TextInputLayout textInputLayout_interval = new TextInputLayout(getActivity());
+                    textInputLayout_interval.setHint("Interval: 0 - 9999 [ms]");
+                    final TextInputEditText editText_interval = new TextInputEditText(getActivity());
+                    editText_interval.setText(String.valueOf(interval));
+                    editText_interval.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText_interval.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                int interval =  Integer.parseInt(editText_interval.getText().toString());
+                                String message = String.format("I%d%04d", position, interval);
+                                startRequest(room.getIp(), message);
+                                editText_interval.clearFocus();
+                                // Check if no view has focus:
+                                View view = getActivity().getCurrentFocus();
+                                if (view != null) {
+                                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                                }
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+                    textInputLayout_interval.addView(editText_interval);
+                    ll_dialog.addView(textInputLayout_interval);
 
                     SeekBar seekBar_Interval = new SeekBar(getActivity());
+                    seekBar_Interval.setMax(500);
+                    double progress = 54.28739969 * Math.log(interval);
+                    seekBar_Interval.setProgress((int) progress);
+
                     seekBar_Interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            double interval = Math.exp(0.08517 * progress);
-                            textView_currentInterval.setText(String.format("%.0fms", interval));
-                            Log.d(DEBUG_TAG, String.valueOf(interval));
+                            int dimension = progress / 10;
+                            int dim_index = progress % 10;
+                            int interval_raw = (int) Math.round(Math.exp(0.01842048 * progress));
+                            int interval;
+                            if ( interval_raw > 9750)
+                                interval = 9999;
+                            else if ( interval_raw > 999 )
+                                interval = (interval_raw / 250) * 250;
+                            else if ( interval_raw > 99 )
+                                interval = (interval_raw / 50) * 50;
+                            else if ( interval_raw > 9 )
+                                interval = (interval_raw / 5) * 5;
+                            else
+                                interval = interval_raw;
+
+                            editText_interval.setText(String.valueOf(interval));
                         }
 
                         @Override
@@ -355,43 +493,24 @@ public class RoomFragment extends Fragment {
                         @Override
                         public void onStopTrackingTouch(SeekBar seekBar) {
                             int progress = seekBar.getProgress();
-                            double interval = Math.exp(0.08517 * progress);
-                            String message = String.format("I%d%04.0f", position, interval);
+                            int interval =  Integer.parseInt(editText_interval.getText().toString());
+                            String message = String.format("I%d%04d", position, interval);
                             startRequest(room.getIp(), message);
                         }
                     });
                     ll_dialog.addView(seekBar_Interval);
 
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(final DialogInterface arg0) {
+                            refreshFragment();
+                        }
+                    });
                     dialog.show();
                 }
             });
         }
 
-        private void createSliders(final View itemView) {
-            SeekBar slider_interval = (SeekBar) itemView.findViewById(R.id.seekBar_Interval);
-            slider_interval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                TextView textView_interval = (TextView) itemView.findViewById(R.id.textView_interval);
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    double interval = Math.exp(0.08517 * progress);
-                    textView_interval.setText(String.format("%.0fms", interval));
-                    Log.d(DEBUG_TAG, String.valueOf(interval));
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    int progress = seekBar.getProgress();
-                    double interval = Math.exp(0.08517 * progress);
-                    String message = String.format("I%.0f", interval);
-                    startRequest(room.getIp(), message);
-                }
-            });
-        }
     }
 
     private void refreshFragment() {
@@ -399,8 +518,7 @@ public class RoomFragment extends Fragment {
             startRequest(room.getIp(), "M_");
         }
         else {
-            for (int i = 0; i < room.getStripes_num(); i++)
-                startRequest(room.getIp(), "P" + i + "_");
+            startRequest(room.getIp(), "P" + room.getStripes_num() + "_");
         }
 
         // turn off Spinner
@@ -462,8 +580,7 @@ public class RoomFragment extends Fragment {
                     default:
                         return;
                 }
-                for (int i = 0; i < room.getStripes_num(); i++)
-                    startRequest(room.getIp(), "P" + i + "_");
+                startRequest(room.getIp(), "P" + room.getStripes_num() + "_");
                 break;
             case 'P':   // process as Pattern
                 processPattern(value);
@@ -471,56 +588,76 @@ public class RoomFragment extends Fragment {
             case 'C':   // Color
                 processColor(value);
                 break;
+            case 'B':
+                processBrightness(value);
+                break;
             case 'I':
-                double progress = 11.74096 * Math.log(Integer.parseInt(value));
-                room.setInterval((int) progress);
-                Log.d(DEBUG_TAG, "progress: " + progress);
-//                    SeekBar slider_interval = (SeekBar) itemView.findViewById(R.id.seekBar_Interval);
-//                    slider_interval.setProgress((int) progress);
+                processInterval(value);
                 break;
             default:
-                //Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
+//                Snackbar.make(coordinatorLayout, "Invalid response from " + serverIP + "\n" + response, Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void processPattern(String value) {
-        int value_int = Integer.parseInt(value);
-        int stripeNumber =  value_int / 100;
-        int pattern = value_int % 100;
-        room.setPattern(stripeNumber, pattern);
-
-        ListView list = (ListView) fragment_view.findViewById(R.id.roomListView);
-        View listChild = list.getChildAt(stripeNumber);
-
-        SwitchCompat switchCompatOnOff = (SwitchCompat) listChild.findViewById(R.id.switch_on_off);
-        switchCompatOnOff.setEnabled(true);
-
-        // set Main Switch of the Stripe
-        if ( (pattern == 0) && (switchCompatOnOff.isChecked()) ) {
-            send_enable.set(stripeNumber, false);
-            switchCompatOnOff.setChecked(false);
+        String pattern_string = value;
+        if (value.contains(":")) {
+            pattern_string = value.split(":")[0];
+            String interval_string = value.split(":")[1];
+            int interval = Integer.parseInt(interval_string.substring(1));
+            room.setInterval(interval / 10000, interval % 10000);
         }
-        else if ( !(pattern == 0) && !(switchCompatOnOff.isChecked()) ) {
-            send_enable.set(stripeNumber, false);
-            switchCompatOnOff.setChecked(true);
-        }
+        int pattern_value_int = Integer.parseInt(pattern_string);
+        int stripeNumber =  pattern_value_int / 100;
+        int pattern = pattern_value_int % 100;
 
-        // set Icon of the Stripe
-        ImageView imageView_icon = (ImageView) listChild.findViewById(R.id.imageView_stripeIcon);
-        if ( (pattern >= 0) && (pattern <= 9) ) {
-            imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
-            startRequest(room.getIp(), "C" + ((stripeNumber *100) + pattern) + "_");
-        }
-        else if ( (pattern >= 20) && (pattern <= 29) ) {
-            imageView_icon.clearColorFilter();
-            imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_rainbow_24dp);
 
+        if (stripeNumber == room.getStripes_num()) {
+
+            if (pir_enable || pattern == 0) {
+                if (switch_Toolbar.isChecked()) {
+                    send_main_switch_enable = false;
+                    switch_Toolbar.setChecked(false);
+                }
+            } else {
+                if (!switch_Toolbar.isChecked()) {
+                    send_main_switch_enable = false;
+                    switch_Toolbar.setChecked(true);
+                }
+            }
+
+            for (int i = 0; i < room.getStripes_num(); i++)
+                startRequest(room.getIp(), "P" + i + "_");
+        } else {
+            ListView list = (ListView) fragment_view.findViewById(R.id.roomListView);
+            View listChild = list.getChildAt(stripeNumber);
+
+            SwitchCompat switchCompatOnOff = (SwitchCompat) listChild.findViewById(R.id.switch_on_off);
+            switchCompatOnOff.setEnabled(true);
+
+            // set Main Switch of the Stripe
+            if ( (pattern == 0) && (switchCompatOnOff.isChecked()) ) {
+                send_enable.set(stripeNumber, false);
+                switchCompatOnOff.setChecked(false);
+            } else if ( !(pattern == 0) && !(switchCompatOnOff.isChecked()) ) {
+                send_enable.set(stripeNumber, false);
+                switchCompatOnOff.setChecked(true);
+            }
+
+            // set Icon of the Stripe
+            ImageView imageView_icon = (ImageView) listChild.findViewById(R.id.imageView_stripeIcon);
+            if ( (pattern >= 0) && (pattern <= 9) ) {
+                imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_white_24dp);
+                startRequest(room.getIp(), "C" + ((stripeNumber *100) + pattern) + "_");
+            } else if ( (pattern >= 20) && (pattern <= 29) ) {
+                imageView_icon.clearColorFilter();
+                imageView_icon.setImageResource(R.drawable.ic_lightbulb_outline_rainbow_24dp);
+            } else if ( (pattern >= 30) && (pattern <= 33) ) {
+                imageView_icon.setImageResource(R.drawable.ic_fire_white_24dp);
+                imageView_icon.setColorFilter(Color.RED);
+            }
+            room.setPattern(stripeNumber, pattern);
         }
-        else if ( (pattern >= 30) && (pattern <= 33) ) {
-            imageView_icon.setImageResource(R.drawable.ic_fire_white_24dp);
-            imageView_icon.setColorFilter(Color.RED);
-        }
-        room.setPattern(stripeNumber, pattern);
     }
 
     private void processColor(String value) {
@@ -529,10 +666,8 @@ public class RoomFragment extends Fragment {
             int stripeNumber = value_info / 100;
             int colorNumber = value_info % 100;
             String color_string = value.split(":")[1];
-            int color;
-            int red;
-            int green;
-            int blue;
+            int color = 0;
+            int red, green, blue;
 
             if ( color_string.contains(";")) {
                 if (colorNumber == 10) {
@@ -544,14 +679,42 @@ public class RoomFragment extends Fragment {
                         room.setColor(stripeNumber, i, color);
                     }
                 }
-            }
-            else {
-                red = Integer.parseInt(color_string.split(",")[0]);
-                green = Integer.parseInt(color_string.split(",")[1]);
-                blue = Integer.parseInt(color_string.split(",")[2]);
+            } else if ( color_string.contains("[[") ) {
+                if (colorNumber == 10) {
+                    try {
+                        JSONArray jArr_colors = new JSONArray(color_string);
+                        for (int i = 0; i <= 9; i++) {
+                            JSONArray jArr_color = jArr_colors.getJSONArray(i);
+                            red = jArr_color.getInt(0);
+                            green = jArr_color.getInt(1);
+                            blue = jArr_color.getInt(2);
+                            color = Color.rgb(red, green, blue);
+                            room.setColor(stripeNumber, i, color);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(DEBUG_TAG, "unexpected JSON exception", e);
+                    }
+                }
+            } else {
+                if (color_string.contains("[") ) {
+                    try {
+                        JSONArray jArr_color = new JSONArray(color_string);
+                        red = jArr_color.getInt(0);
+                        green = jArr_color.getInt(1);
+                        blue = jArr_color.getInt(2);
+                        color = Color.rgb(red, green, blue);
+                        room.setColor(stripeNumber, colorNumber, color);
+                    } catch (JSONException e) {
+                        Log.e(DEBUG_TAG, "unexpected JSON exception", e);
+                    }
+                } else {
+                    red = Integer.parseInt(color_string.split(",")[0]);
+                    green = Integer.parseInt(color_string.split(",")[1]);
+                    blue = Integer.parseInt(color_string.split(",")[2]);
 
-                color = Color.rgb(red, green, blue);
-                room.setColor(stripeNumber, colorNumber, color);
+                    color = Color.rgb(red, green, blue);
+                    room.setColor(stripeNumber, colorNumber, color);
+                }
 
                 // get color view from card to change tint
                 ListView list = (ListView) fragment_view.findViewById(R.id.roomListView);
@@ -564,6 +727,20 @@ public class RoomFragment extends Fragment {
 
             }
         }
+    }
+
+    private void processBrightness(String value) {
+        int value_int = Integer.parseInt(value);
+        if (value_int <= 255) {
+            room.setBrightness(value_int);
+        }
+    }
+
+    private void processInterval(String value) {
+        int value_int = Integer.parseInt(value);
+        int stripeNumber = value_int / 10000;
+        int interval = value_int % 10000;
+        room.setInterval(stripeNumber, interval);
     }
 
     private void getVolkszaehlerData() {

@@ -36,7 +36,7 @@
 
             <TextView
                 android:id="@+id/item_txtName"
-                style="@style/TextAppearance.AppCompat.Subhead"
+                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Room name"
@@ -51,7 +51,7 @@
                 android:id="@+id/item_textIP"
                 android:layout_below="@+id/item_txtName"
                 android:layout_alignStart="@+id/item_txtName"
-                style="@style/Base.TextAppearance.AppCompat.Caption" />
+                style="@style/Base.TextAppearance.AppCompat.Body1" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,25 +60,47 @@
                 android:id="@+id/item_textStripes"
                 android:layout_below="@+id/item_textIP"
                 android:layout_alignStart="@+id/item_txtName"
-                style="@style/Base.TextAppearance.AppCompat.Caption" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="DHT?"
-                android:id="@+id/item_textDHT"
-                android:layout_below="@+id/item_textStripes"
-                android:layout_alignStart="@+id/item_txtName"
-                style="@style/Base.TextAppearance.AppCompat.Caption" />
+                style="@style/Base.TextAppearance.AppCompat.Body1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PIR?"
                 android:id="@+id/item_textPIR"
-                android:layout_below="@+id/item_textDHT"
+                android:layout_below="@+id/item_textStripes"
                 android:layout_alignStart="@+id/item_txtName"
-                style="@style/Base.TextAppearance.AppCompat.Caption" />
+                style="@style/Base.TextAppearance.AppCompat.Body1"
+                android:enabled="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DHT?"
+                android:id="@+id/item_textDHT"
+                android:layout_below="@+id/item_textPIR"
+                android:layout_alignStart="@+id/item_txtName"
+                style="@style/Base.TextAppearance.AppCompat.Body1"
+                android:enabled="false" />
+
+            <TextView
+                android:id="@+id/item_textTempUUID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_textDHT"
+                android:layout_alignStart="@id/item_txtName"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:text="T_UUID"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/item_textHumidUUID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_textTempUUID"
+                android:layout_alignStart="@id/item_txtName"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:text="H_UUID"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

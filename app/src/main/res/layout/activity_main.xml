@@ -103,6 +103,6 @@
     <!--</android.support.design.widget.AppBarLayout>-->
 
 
-    <!--<include layout="@layout/fragment_rooms" />-->
+    <!--<include layout="@layout/fragment_main" />-->
 
 </android.support.design.widget.CoordinatorLayout>

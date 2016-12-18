@@ -22,11 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RoomActivity"
-            android:label="@string/title_activity_room"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".PrefRoomActivity"
             android:label="@string/title_activity_pref_room"
             android:parentActivityName=".MainActivity"
@@ -51,11 +46,11 @@
         <activity
             android:name=".ColorActivity"
             android:label="@string/title_activity_color"
-            android:parentActivityName=".RoomActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="donduritoapps.illumino.RoomActivity" />
+                android:value="donduritoapps.illumino.MainActivity" />
         </activity>
     </application>
 

@@ -90,24 +90,32 @@
 
                 </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/item_imageIconPir"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_directions_walk_white_18dp"
-                    android:layout_marginEnd="4dp"
-                    android:visibility="visible"/>
+
             </RelativeLayout>
 
-            <android.support.v7.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/item_switch"
-                android:layout_gravity="center_vertical"
-                android:checked="false"
-                android:enabled="false" />
+            <RelativeLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/item_imageIconPir"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_fiber_manual_record_white_18dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="2dp"
+                    android:layout_alignParentEnd="true"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/item_switch"
+                    android:layout_centerVertical="true"
+                    android:checked="false"
+                    android:enabled="false" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

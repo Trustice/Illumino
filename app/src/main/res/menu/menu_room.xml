@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="donduritoapps.illumino.MainActivity">
     <item
-        android:id="@+id/action_refresh"
-        android:orderInCategory="101"
-        android:title="@string/action_refresh"
-        android:icon="@drawable/ic_refresh_black_24dp"
-        app:showAsAction="never" />
+        android:id="@+id/action_brightness"
+        android:orderInCategory="000"
+        android:title="Brightness"
+        android:icon="@drawable/ic_brightness_medium_white_24dp"
+        app:showAsAction="always"
+        />
     <item
-        android:id="@+id/action_volkszaehler"
-        android:orderInCategory="102"
-        android:title="Volkszaehler"
-        app:showAsAction="never" />
+        android:id="@+id/action_switch"
+        android:title=""
+        app:showAsAction="always"
+        app:actionLayout="@layout/menu_switch_layout"
+        android:orderInCategory="1" />
+
 </menu>
